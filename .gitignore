@@ -42,6 +42,12 @@
 *.pyc
 *.pyo
 *.pyd
+*.docx
+*.doc
+*.pdf
+*.txt
+*.pptx
+*.ppt
 
 # files
 data/raw
@@ -50,7 +56,8 @@ data/embeddings
 
 # Environment
 .env
-vnev
+venv
+.venv
 
 #Jupyter Notebooks
 *.ipynb_checkpoints
