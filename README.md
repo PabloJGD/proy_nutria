@@ -1,60 +1,210 @@
 # 🥗 NutrIA: Agente de Nutrición Inteligente
 
-## 📝 1. Resumen Ejecutivo
-**NutrIA** es un asistente de nutrición avanzada y gestión de desperdicio alimentario impulsado por **IA Agéntica**. Desarrollado con el framework **LangChain**, este sistema no se limita a responder preguntas; ejecuta acciones autónomas como identificar ingredientes mediante visión artificial, validar la seguridad alimentaria según perfiles clínicos (bebés, diabéticos, atletas) y conectar con APIs externas para generar planes de cocina reales y listas de compras.
+## 📝 Resumen Ejecutivo
+
+**NutrIA** es un asistente de nutrición avanzada impulsado por **IA Agéntica**. Desarrollado con **LangChain**, este sistema ejecuta acciones autónomas como identificar ingredientes mediante visión artificial (Google Gemini), validar restricciones dietéticas según perfiles clínicos y conectar con APIs externas para generar recetas personalizadas con información nutricional completa.
 
 ---
 
-## 🧠 2. Objetivo del Proyecto
-Diseñar y construir un agente inteligente modular que resuelva dos problemas críticos: el desperdicio de alimentos en el hogar y la falta de personalización nutricional segura. El agente transforma un inventario doméstico aleatorio en una solución alimenticia técnica, eficiente y alineada con la salud del usuario.
+## 🏗️ Arquitectura del Sistema
+
+<p align="center">
+  <img src="docs/agent_architecture.png" alt="AI Chef Agent Architecture" width="800"/>
+</p>
 
 ---
 
-## 🛠️ 3. Requisitos del Proyecto (Módulo II)
+## 📂 Estructura del Proyecto
 
-### A. Agente Inteligente Modular
-Construido íntegramente con **LangChain**, el agente utiliza un motor de razonamiento que gestiona el contexto y toma decisiones dinámicas basadas en las entradas del usuario (texto o imagen).
-
-### B. Herramientas Personalizadas (Custom Tools)
-Se han desarrollado 3 herramientas fundamentales para cumplir con el estándar exigido:
-1.  **`InventoryVisionTool` (Ingesta Multimodal):** Utiliza modelos de visión para analizar fotos de neveras o despensas y extraer una lista estructurada de ingredientes.
-2.  **`ClinicalSafeGuardTool` (Filtro de Seguridad):** Actúa como un guardián lógico. Valida ingredientes y preparaciones según el perfil (ej. si detecta un bebé de 6 meses, bloquea automáticamente el uso de sal, miel o frutos secos enteros).
-3.  **`SmartSourcingTool` (Ejecución de Terceros):** Conecta con la **API de Spoonacular** y **Tavily Search** para obtener recetas verificadas, ajustar porciones según comensales y generar la lista de compras de ingredientes faltantes.
-
-### C. Lógica, Autonomía y Memoria
-* **Memoria de Corto Plazo:** Implementación de `ConversationBufferMemory` para recordar restricciones y preferencias durante la sesión.
-* **Autonomía:** El agente decide de forma independiente si debe sugerir un sustituto de ingrediente o si es estrictamente necesario añadir un ítem a la lista de compras.
+```
+proy_nutria/
+├── main.py                    # Entry point - FastAPI server
+├── requirements.txt           # Dependencies (pinned versions)
+├── Dockerfile                 # Container config
+│
+├── configs/
+│   └── .env                   # API Keys (OPENAI, GEMINI, SPOONACULAR)
+│
+├── src/
+│   ├── agents/
+│   │   └── chef_agent.py      # 🤖 Main LangChain Agent
+│   │
+│   ├── api/
+│   │   └── app.py             # 🔌 FastAPI endpoints
+│   │
+│   ├── frontend/
+│   │   └── app.py             # 📱 Streamlit Web UI
+│   │
+│   ├── models/
+│   │   └── schemas.py         # 📦 Pydantic models
+│   │
+│   ├── prompts/
+│   │   └── chef_prompt.py     # 📝 System prompts
+│   │
+│   ├── tools/
+│   │   ├── vision.py          # 👁️ Image analysis (Gemini)
+│   │   └── nutrition.py       # 🍎 Recipe & nutrition (Spoonacular)
+│   │
+│   └── utils/
+│       └── helpers.py         # 🔧 Utility functions
+│
+├── docs/
+│   └── agent_architecture.drawio  # 📊 Architecture diagram
+│
+└── tests/
+    ├── unit/
+    │   └── test_models.py
+    └── integration/
+```
 
 ---
 
-## 💎 4. Implicancias y Diferenciadores
-¿Por qué usar **NutrIA** en lugar de ChatGPT o Gemini estándar?
-* **Agencia Real:** No solo genera texto; "hace" tareas (extrae datos de fotos, consulta bases de datos externas).
-* **Validación de Seguridad:** Posee filtros lógicos programados para evitar alucinaciones en temas críticos de salud.
-* **Personalización Persistente:** Considera el contexto biológico (etapa de crecimiento, patologías) como prioridad antes que el sabor.
+## 🔧 Tools (Herramientas del Agente)
+
+| Tool | Archivo | Función | API Externa |
+|------|---------|---------|-------------|
+| **Vision Tool** | `src/tools/vision.py` | `analyze_image_for_ingredients()` | Google Gemini 1.5 Flash |
+| **Recipe Search** | `src/tools/nutrition.py` | `find_recipes_by_ingredients()` | Spoonacular |
+| **Nutrition Info** | `src/tools/nutrition.py` | `get_recipe_details()` | Spoonacular |
 
 ---
 
-## 💰 5. Análisis de Costos (Estrategia $0)
-El proyecto es técnica y comercialmente viable sin inversión inicial en infraestructura:
-* **LLM:** Google Gemini 1.5 Flash (Free Tier vía Google AI Studio).
-* **Orquestación:** LangChain (Librería Open Source).
-* **APIs de Datos:** Spoonacular y Tavily (Planes Gratuitos).
-* **Hosting:** Streamlit Cloud / Vercel (Capa gratuita para desarrolladores).
-* **Base de Datos:** SQLite o Supabase (Free Tier).
+## ⚙️ Configuración
+
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/PabloJGD/proy_nutria.git
+cd proy_nutria
+```
+
+### 2. Crear entorno virtual
+```bash
+python3 -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+# .venv\Scripts\activate   # Windows
+```
+
+### 3. Instalar dependencias
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configurar variables de entorno
+Edita `configs/.env` con tus API keys:
+
+```env
+# LLM APIs
+OPENAI_API_KEY=sk-proj-...
+GOOGLE_STUDIO_AI_API_KEY=AIzaSy...
+
+# Nutrition API
+SPOONACULAR_API_KEY=eef177...
+
+# Optional
+TAVILY_API_KEY=tvly-dev-...
+LANGGRAPH_API_KEY=lsv2_pt_...
+```
 
 ---
 
-## 🚀 6. Roadmap y Escalabilidad (Mejoras Futuras)
-Para elevar NutrIA a un nivel industrial/SaaS:
-1.  **RAG (Retrieval Augmented Generation):** Integración de bases de datos vectoriales con guías oficiales de la OMS y pediatría para dar respaldo científico a cada sugerencia.
-2.  **MCP (Model Context Protocol):** Conexión con dispositivos IoT (neveras inteligentes) y sincronización con Apple Health/Google Fit para monitoreo metabólico en tiempo real.
+## 🚀 Ejecución
+
+### Iniciar Backend (API)
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+La API estará disponible en: `http://localhost:8000`  
+Documentación interactiva: `http://localhost:8000/docs`
+
+### Iniciar Frontend (Streamlit)
+En otra terminal:
+```bash
+streamlit run src/frontend/app.py
+```
+La interfaz estará disponible en: `http://localhost:8501`
 
 ---
 
-## 📦 7. Instalación y Ejecución
+## 📱 Uso
 
-1. **Clonar el repositorio:**
-   ```bash
-   git clone [https://github.com/tu-usuario/NutrIA.git](https://github.com/tu-usuario/NutrIA.git)
-   cd NutrIA
+1. Abre `http://localhost:8501` en tu navegador
+2. **Configura tu perfil** en el sidebar:
+   - Nombre y edad
+   - Objetivos de salud (perder peso, ganar músculo)
+   - Restricciones dietéticas (Vegano, Sin Gluten, Keto, etc.)
+   - Alergias
+3. **Añade ingredientes** mediante:
+   - 📷 **Cámara**: Toma una foto de tus ingredientes
+   - 🖼️ **Upload**: Sube una imagen existente
+   - ✏️ **Texto**: Escribe la lista manualmente
+4. Haz clic en **"🔍 Find Recipes"**
+5. Recibe recomendaciones personalizadas con:
+   - Nombre del plato
+   - Por qué se ajusta a tu perfil
+   - Información nutricional (Calorías, Proteínas, Carbohidratos, Grasas)
+   - Instrucciones de preparación
+
+---
+
+## 🧪 Tests
+
+```bash
+# Ejecutar tests unitarios
+pytest tests/unit/
+
+# Ejecutar todos los tests
+pytest
+```
+
+---
+
+## 🐳 Docker
+
+```bash
+# Construir imagen
+docker build -t nutria-agent .
+
+# Ejecutar contenedor
+docker run -p 8000:8000 --env-file configs/.env nutria-agent
+```
+
+---
+
+## 💰 Costos (Estrategia $0)
+
+| Componente | Servicio | Costo |
+|------------|----------|-------|
+| LLM Vision | Google Gemini 1.5 Flash | Free Tier |
+| LLM Agent | OpenAI GPT-4o | Pay-per-use |
+| Recetas | Spoonacular | Free Tier (150 req/día) |
+| Orquestación | LangChain | Open Source |
+| Frontend | Streamlit | Open Source |
+| Hosting | Streamlit Cloud / Vercel | Free Tier |
+
+---
+
+## 🚀 Roadmap
+
+- [ ] **RAG Integration**: Base de datos vectorial con guías OMS
+- [ ] **MCP Protocol**: Conexión con dispositivos IoT
+- [ ] **Multi-idioma**: Soporte para español completo
+- [ ] **PWA**: Aplicación móvil progresiva
+- [ ] **Auth**: Sistema de usuarios y persistencia de perfiles
+
+---
+
+## 📄 Licencia
+
+MIT License - Ver [LICENSE](LICENSE) para más detalles.
+
+---
+
+## 👥 Contribuidores
+
+- **Pablo Guizado** - Desarrollador Principal
+
+---
+
+<p align="center">
+  <b>🍳 NutrIA - Tu Chef Personal con Inteligencia Artificial</b>
+</p>
