@@ -16,7 +16,8 @@ st.markdown("Upload usage photo of your ingredients or list them, and I'll recom
 with st.sidebar:
     st.header("👤 Your Profile")
     name = st.text_input("Name", "User")
-    age = st.number_input("Age", min_value=10, max_value=100, value=30)
+    # Soporta decimales para bebés (ej. 0.5 años)
+    age = st.number_input("Age", min_value=0.0, max_value=120.0, value=30.0, step=0.1)
     
     st.subheader("Health Goals")
     goals = st.text_area("Your Goals (e.g., Lose weight, build muscle)", "Eat healthy")
