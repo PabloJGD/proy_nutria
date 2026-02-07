@@ -103,7 +103,7 @@ class UserProfile(BaseModel):
         ... )
     """
     name: Optional[str] = Field("User", description="Nombre del usuario")
-    age: Optional[int] = Field(None, description="Edad del usuario")
+    age: Optional[float] = Field(None, description="Edad del usuario (soporta decimales para bebés)")
     dietary_restrictions: List[str] = Field(
         default_factory=list, 
         description="Restricciones dietéticas. Ej: ['Vegano', 'Sin Gluten', 'Keto']"
