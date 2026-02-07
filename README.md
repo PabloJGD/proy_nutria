@@ -8,9 +8,32 @@
 
 ## 🏗️ Arquitectura del Sistema
 
-<p align="center">
-  <img src="docs/agent_architecture.png" alt="AI Chef Agent Architecture" width="800"/>
-</p>
+```mermaid
+graph TD
+    User([👤 Usuario]) -- "Ingredientes (ES/Imagen)" --> Agent[🤖 NutrIA Agent]
+    
+    subgraph Tools [Herramientas LangChain]
+        Translator[🔤 Translator ES-EN]
+        Vision[👁️ Vision Gemini 1.5]
+        Nutrition[🍎 Spoonacular API]
+    end
+    
+    Agent --> Translator
+    Agent --> Vision
+    Agent --> Nutrition
+    
+    Nutrition -- "Recetas + Nutrición" --> Agent
+    Agent -- "Respuesta Amigable (ES)" --> User
+```
+
+---
+### Flujo de Trabajo:
+1.  **Entrada**: El usuario proporciona ingredientes (Texto/Imagen) y su perfil.
+2.  **Traducción**: El agente utiliza `translate_es_to_en` para normalizar los términos a inglés (optimización para Spoonacular).
+3.  **Identificación**: Gemini 1.5 Flash analiza imágenes para detectar ingredientes adicionales.
+4.  **Búsqueda**: El agente consulta Spoonacular para encontrar recetas que coincidan con ingredientes y restricciones.
+5.  **Validación**: Se obtiene la ficha nutricional completa para asegurar el cumplimiento de objetivos.
+6.  **Entrega**: Respuesta final amigable en español.
 
 ---
 
@@ -43,18 +66,16 @@ proy_nutria/
 │   │
 │   ├── tools/
 │   │   ├── vision.py          # 👁️ Image analysis (Gemini)
-│   │   └── nutrition.py       # 🍎 Recipe & nutrition (Spoonacular)
+│   │   ├── nutrition.py       # 🍎 Recipe & nutrition (Spoonacular)
+│   │   └── translator.py      # 🔤 Translation tool (ES to EN)
 │   │
 │   └── utils/
 │       └── helpers.py         # 🔧 Utility functions
 │
-├── docs/
-│   └── agent_architecture.drawio  # 📊 Architecture diagram
+├── scripts/
+│   └── nutria_cli.py          # 💻 Command Line Interface
 │
 └── tests/
-    ├── unit/
-    │   └── test_models.py
-    └── integration/
 ```
 
 ---
@@ -64,6 +85,7 @@ proy_nutria/
 | Tool | Archivo | Función | API Externa |
 |------|---------|---------|-------------|
 | **Vision Tool** | `src/tools/vision.py` | `analyze_image_for_ingredients()` | Google Gemini 1.5 Flash |
+| **Translation** | `src/tools/translator.py` | `translate_es_to_en()` | OpenAI GPT-4o Mini |
 | **Recipe Search** | `src/tools/nutrition.py` | `find_recipes_by_ingredients()` | Spoonacular |
 | **Nutrition Info** | `src/tools/nutrition.py` | `get_recipe_details()` | Spoonacular |
 
@@ -77,7 +99,7 @@ git clone https://github.com/PabloJGD/proy_nutria.git
 cd proy_nutria
 ```
 
-### 2. Crear entorno virtual
+### 2. Crear entorno virtual (Recomendado)
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate  # Linux/Mac
@@ -109,40 +131,31 @@ LANGGRAPH_API_KEY=lsv2_pt_...
 
 ## 🚀 Ejecución
 
-### Iniciar Backend (API)
+### Opción A: Interfaz de Consola (CLI)
+Ideal para pruebas rápidas y desarrolladores.
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+python scripts/nutria_cli.py
 ```
-La API estará disponible en: `http://localhost:8000`  
-Documentación interactiva: `http://localhost:8000/docs`
 
-### Iniciar Frontend (Streamlit)
-En otra terminal:
+### Opción B: Interfaz Web (Streamlit)
 ```bash
+# Terminal 1: API
+uvicorn main:app --reload
+
+# Terminal 2: Frontend
 streamlit run src/frontend/app.py
 ```
-La interfaz estará disponible en: `http://localhost:8501`
 
 ---
 
 ## 📱 Uso
 
-1. Abre `http://localhost:8501` en tu navegador
-2. **Configura tu perfil** en el sidebar:
-   - Nombre y edad
-   - Objetivos de salud (perder peso, ganar músculo)
-   - Restricciones dietéticas (Vegano, Sin Gluten, Keto, etc.)
-   - Alergias
-3. **Añade ingredientes** mediante:
-   - 📷 **Cámara**: Toma una foto de tus ingredientes
-   - 🖼️ **Upload**: Sube una imagen existente
-   - ✏️ **Texto**: Escribe la lista manualmente
-4. Haz clic en **"🔍 Find Recipes"**
-5. Recibe recomendaciones personalizadas con:
-   - Nombre del plato
-   - Por qué se ajusta a tu perfil
-   - Información nutricional (Calorías, Proteínas, Carbohidratos, Grasas)
-   - Instrucciones de preparación
+1. **Configura tu perfil**: Metas de salud, alergias y restricciones (Vegano, Keto, etc.).
+2. **Añade ingredientes**:
+   - 📷 **Cámara**: Foto en vivo de tu nevera.
+   - 🖼️ **Upload**: Sube una imagen.
+   - ✏️ **Texto**: Escribe "pollo, espinacas, ajo".
+3. **Analiza y Cocina**: El agente traducirá tus términos, buscará recetas y te dará el paso a paso nutricional.
 
 ---
 
@@ -175,21 +188,19 @@ docker run -p 8000:8000 --env-file configs/.env nutria-agent
 | Componente | Servicio | Costo |
 |------------|----------|-------|
 | LLM Vision | Google Gemini 1.5 Flash | Free Tier |
-| LLM Agent | OpenAI GPT-4o | Pay-per-use |
-| Recetas | Spoonacular | Free Tier (150 req/día) |
-| Orquestación | LangChain | Open Source |
-| Frontend | Streamlit | Open Source |
-| Hosting | Streamlit Cloud / Vercel | Free Tier |
+| LLM Agent | OpenAI GPT-4o | Pay-per-use (Céntimos) |
+| Recetas | Spoonacular | Free Tier |
+| Traducción | GPT-4o Mini | Ultra Low Cost |
 
 ---
 
 ## 🚀 Roadmap
 
-- [ ] **RAG Integration**: Base de datos vectorial con guías OMS
-- [ ] **MCP Protocol**: Conexión con dispositivos IoT
-- [ ] **Multi-idioma**: Soporte para español completo
-- [ ] **PWA**: Aplicación móvil progresiva
-- [ ] **Auth**: Sistema de usuarios y persistencia de perfiles
+- [x] **Multi-idioma**: Soporte para español mediante traducción inteligente.
+- [x] **CLI Interface**: Ejecución directa en terminal.
+- [ ] **LangGraph Integration**: Migración a flujos de estados cíclicos.
+- [ ] **RAG Integration**: Base de datos vectorial con guías OMS.
+- [ ] **Auth**: Sistema de usuarios y persistencia.
 
 ---
 
