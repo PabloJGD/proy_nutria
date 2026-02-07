@@ -116,15 +116,15 @@ Edita `configs/.env` con tus API keys:
 
 ```env
 # LLM APIs
-OPENAI_API_KEY=sk-proj-...
-GOOGLE_STUDIO_AI_API_KEY=AIzaSy...
+OPENAI_API_KEY=....
+GOOGLE_STUDIO_AI_API_KEY=....
 
 # Nutrition API
-SPOONACULAR_API_KEY=eef177...
+SPOONACULAR_API_KEY=....
 
 # Optional
-TAVILY_API_KEY=tvly-dev-...
-LANGGRAPH_API_KEY=lsv2_pt_...
+TAVILY_API_KEY=....
+LANGGRAPH_API_KEY=....
 ```
 
 ---
@@ -171,7 +171,11 @@ pytest
 
 ---
 
+---
+
 ## 🐳 Docker
+
+El proyecto está listo para ser contenedorizado. El `Dockerfile` incluye las dependencias necesarias para conectar con la base de datos Postgres.
 
 ```bash
 # Construir imagen
@@ -180,6 +184,15 @@ docker build -t nutria-agent .
 # Ejecutar contenedor
 docker run -p 8000:8000 --env-file configs/.env nutria-agent
 ```
+
+---
+
+## 🧠 Memoria Persistente (GCP Postgres)
+
+NutrIA ahora recuerda tus conversaciones anteriores gracias a la integración con **Postgres**. 
+- **Persistencia**: Los mensajes se guardan en la tabla `chat_history`.
+- **Sesiones**: Cada usuario (o pestaña del navegador) genera un `session_id` único para mantener su contexto.
+- **Configuración**: Asegúrate de que las credenciales `DB_USER`, `DB_PASS`, `DB_HOST`, etc., estén correctamente configuradas en tu `.env`.
 
 ---
 
