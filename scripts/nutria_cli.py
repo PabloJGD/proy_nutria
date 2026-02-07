@@ -19,11 +19,11 @@ def main():
     name = input("Nombre [Usuario]: ").strip() or "Usuario"
     
     try:
-        age_in = input("Edad: ").strip()
-        age = int(age_in) if age_in else 30
+        age_in = input("Edad (ej. 25 o 0.5 para 6 meses): ").strip()
+        age = float(age_in) if age_in else None
     except ValueError:
-        age = 30
-        print("Edad inválida, usando 30.")
+        age = None
+        print("Edad no especificada o formato inválido.")
 
     print("\nIngrese restricciones dietéticas (separadas por comas, ej. Vegano, Sin Gluten)")
     restrictions_in = input("> ").strip()
