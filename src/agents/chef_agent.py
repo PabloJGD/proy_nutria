@@ -25,6 +25,7 @@ from langchain_openai import ChatOpenAI
 from langchain.agents import AgentExecutor, create_tool_calling_agent
 from src.tools.vision import analyze_image_for_ingredients
 from src.tools.nutrition import find_recipes_by_ingredients, get_recipe_details
+from src.tools.translator import translate_es_to_en
 from src.prompts.chef_prompt import get_chat_prompt
 from src.models.schemas import AgentInput
 
@@ -36,6 +37,7 @@ from src.models.schemas import AgentInput
 # El agente puede "decidir" cuál usar en cada momento
 tools = [
     analyze_image_for_ingredients,  # 👁️ Ver ingredientes en fotos
+    translate_es_to_en,             # 🔤 Traducir ingredientes a inglés
     find_recipes_by_ingredients,     # 🔍 Buscar recetas
     get_recipe_details               # 📊 Obtener nutrición
 ]
