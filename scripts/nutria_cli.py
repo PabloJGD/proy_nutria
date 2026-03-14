@@ -1,7 +1,7 @@
 import os
 import sys
+import uuid
 
-# Add project root to path to allow imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from dotenv import load_dotenv
@@ -10,14 +10,11 @@ load_dotenv(dotenv_path="configs/.env")
 from src.models.schemas import AgentInput, UserProfile
 from src.agents.chef_agent import process_request
 
-def main():
-    print("\n🥗 Bienvenido a NutrIA - AI Chef 🥗")
-    print("============================================\n")
 
-    # 1. Collect User Profile
-    print("--- Paso 1: Perfil del Usuario ---")
+def collect_profile() -> UserProfile:
+    print("\n--- Paso 1: Perfil del Usuario ---")
     name = input("Nombre [Usuario]: ").strip() or "Usuario"
-    
+
     try:
         age_in = input("Edad (ej. 25 o 0.5 para 6 meses): ").strip()
         age = float(age_in) if age_in else None
@@ -36,44 +33,55 @@ def main():
     print("\nIngrese objetivos de salud (ej. Perder peso, Ganar músculo)")
     goals = input("> ").strip() or "Comer saludable"
 
-    profile = UserProfile(
+    return UserProfile(
         name=name,
         age=age,
         dietary_restrictions=restrictions,
         allergies=allergies,
-        health_goals=goals
+        health_goals=goals,
     )
 
-    # 2. Collect Ingredients
-    print("\n--- Paso 2: Ingredientes ---")
-    print("Proporcione ingredientes a través de texto o ruta de imagen.")
-    
-    ingredients_text = input("Lista de ingredientes (separados por comas): ").strip()
-    
-    image_path = input("Ruta de imagen (opcional, archivo local o URL): ").strip()
-    
-    if not ingredients_text and not image_path:
-        print("\n❌ Error: Debes proporcionar ingredientes en texto o una ruta de imagen.")
-        return
 
-    # 3. Create Request
-    request = AgentInput(
-        text_description=ingredients_text if ingredients_text else None,
-        image_data=image_path if image_path else None,
-        user_profile=profile
-    )
+def main():
+    print("\n🥗 Bienvenido a NutrIA - AI Chef 🥗")
+    print("============================================\n")
 
-    # 4. Process
-    print("\n👨‍🍳 NutrIA Chef está pensando... (esto puede tomar un momento)")
-    try:
-        result = process_request(request)
-        print("\n" + "="*50)
-        print("🍽️  RECOMENDACIÓN  🍽️")
-        print("="*50 + "\n")
-        print(result)
-        print("\n" + "="*50)
-    except Exception as e:
-        print(f"\n❌ Error al procesar la solicitud: {e}")
+    profile = collect_profile()
+    session_id = str(uuid.uuid4())
+    print(f"\n✅ Sesión iniciada: {session_id[:8]}…")
+    print("\nEscribe 'salir' para terminar la conversación.\n")
+
+    while True:
+        print("\n--- Nuevo turno ---")
+        ingredients_text = input("Ingredientes o pregunta de seguimiento: ").strip()
+
+        if ingredients_text.lower() in ("salir", "exit", "quit"):
+            print("\n👋 ¡Hasta pronto!")
+            break
+
+        image_path = input("Ruta de imagen (opcional, Enter para omitir): ").strip() or None
+
+        if not ingredients_text and not image_path:
+            print("❌ Debes proporcionar texto o una imagen.")
+            continue
+
+        request = AgentInput(
+            text_description=ingredients_text if ingredients_text else None,
+            image_data=image_path,
+            user_profile=profile,
+        )
+
+        print("\n👨‍🍳 NutrIA está pensando…")
+        try:
+            result = process_request(session_id, request)
+            print("\n" + "=" * 50)
+            print("🍽️  RECOMENDACIÓN")
+            print("=" * 50 + "\n")
+            print(result)
+            print("\n" + "=" * 50)
+        except Exception as e:
+            print(f"\n❌ Error: {e}")
+
 
 if __name__ == "__main__":
     main()
