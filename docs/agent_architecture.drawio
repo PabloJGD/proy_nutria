@@ -381,4 +381,1078 @@
             </root>
         </mxGraphModel>
     </diagram>
+    <diagram name="NutrIA v2 - LangGraph Architecture" id="v2-langgraph">
+        <mxGraphModel dx="1354" dy="994" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1050" math="0" shadow="1">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+
+                <!-- ─── BACKGROUND ─────────────────────────────────────── -->
+                <mxCell id="v2-bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a1a2e;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry width="1800" height="1050" as="geometry"/>
+                </mxCell>
+
+                <!-- ─── HEADER ─────────────────────────────────────────── -->
+                <mxCell id="v2-hbg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#0f3460;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="10" width="1760" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-title" value="🥗  NutrIA v2 — LANGGRAPH CONVERSATIONAL ARCHITECTURE" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=26;fontStyle=1;fontColor=#e94560;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="18" width="1400" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-sub" value="create_react_agent (LangGraph)  ·  PostgresSaver / MemorySaver checkpointing  ·  LangSmith tracing  ·  Conversational REST API" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="54" width="1400" height="22" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- COLUMN 1 — UI LAYER                                    -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <mxCell id="v2-ui-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f3460;strokeColor=#e94560;strokeWidth=3;opacity=80;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="100" width="240" height="760" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ui-hdr" value="📱  USER INTERFACE LAYER" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#e94560;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="112" width="220" height="24" as="geometry"/>
+                </mxCell>
+
+                <!-- Streamlit chat box -->
+                <mxCell id="v2-chat-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#00d9ff;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="34" y="148" width="212" height="155" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-chat-title" value="STREAMLIT CHAT" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
+                    <mxGeometry x="34" y="153" width="212" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-chat-file" value="📄 src/frontend/app.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="34" y="171" width="212" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-chat-feat" value="• st.chat_message() / st.chat_input()&#10;• Historial local en session_state&#10;• Adjuntar imagen (opcional)&#10;• Muestra respuesta del agente&#10;  en tiempo real" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="38" y="188" width="204" height="108" as="geometry"/>
+                </mxCell>
+
+                <!-- Session management box -->
+                <mxCell id="v2-sess-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#e94560;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="34" y="318" width="212" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-sess-title" value="SESSION MANAGEMENT" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#e94560;" parent="1" vertex="1">
+                    <mxGeometry x="34" y="323" width="212" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-sess-content" value="➕ Nueva Sesión → POST /sessions&#10;🔄 Reanudar → GET /sessions/{id}/history&#10;🔑 session_id guardado en session_state&#10;👁️ Historial restaurado al reanudar" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="38" y="341" width="204" height="100" as="geometry"/>
+                </mxCell>
+
+                <!-- User profile box -->
+                <mxCell id="v2-prof-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#00d9ff;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="34" y="462" width="212" height="235" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-prof-title" value="👤  USER PROFILE (Sidebar)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
+                    <mxGeometry x="34" y="467" width="212" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-prof-content" value="▸ Name &amp; Age&#10;▸ Health Goals&#10;▸ Dietary Restrictions&#10;   · Vegetariano / Vegano&#10;   · Sin Gluten / Keto&#10;▸ Allergies&#10;▸ Enviado en POST /sessions&#10;▸ Leído del checkpointer en cada turno" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="38" y="485" width="204" height="208" as="geometry"/>
+                </mxCell>
+
+                <!-- Input methods -->
+                <mxCell id="v2-inputs-title" value="INPUT METHODS" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
+                    <mxGeometry x="34" y="710" width="212" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-in-text" value="✏️" style="ellipse;whiteSpace=wrap;html=1;fillColor=#533483;strokeColor=#e94560;strokeWidth=2;fontSize=20;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="733" width="44" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-in-text-lbl" value="Texto" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="779" width="44" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-in-img" value="🖼️" style="ellipse;whiteSpace=wrap;html=1;fillColor=#533483;strokeColor=#e94560;strokeWidth=2;fontSize=20;" parent="1" vertex="1">
+                    <mxGeometry x="118" y="733" width="44" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-in-img-lbl" value="Imagen" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="118" y="779" width="44" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-in-cam" value="📷" style="ellipse;whiteSpace=wrap;html=1;fillColor=#533483;strokeColor=#e94560;strokeWidth=2;fontSize=20;" parent="1" vertex="1">
+                    <mxGeometry x="186" y="733" width="44" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-in-cam-lbl" value="Cámara" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="186" y="779" width="44" height="14" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- COLUMN 2 — API GATEWAY                                 -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <mxCell id="v2-api-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f3460;strokeColor=#00d9ff;strokeWidth=3;opacity=80;" parent="1" vertex="1">
+                    <mxGeometry x="285" y="100" width="205" height="760" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-api-hdr" value="🔌  API GATEWAY" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
+                    <mxGeometry x="295" y="112" width="185" height="24" as="geometry"/>
+                </mxCell>
+
+                <!-- FastAPI -->
+                <mxCell id="v2-fapi" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#00ff88;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="148" width="178" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-fapi-title" value="⚡  FastAPI" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#00ff88;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="153" width="178" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-fapi-file" value="src/api/app.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="175" width="178" height="16" as="geometry"/>
+                </mxCell>
+
+                <!-- Endpoint: POST /sessions -->
+                <mxCell id="v2-ep1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a472a;strokeColor=#00ff88;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="210" width="178" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep1-m" value="POST" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#00ff88;strokeColor=none;fontSize=9;fontStyle=1;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="220" width="38" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep1-p" value="/sessions" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="348" y="217" width="125" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep1-d" value="Crear sesión + perfil" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#86efac;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="237" width="178" height="16" as="geometry"/>
+                </mxCell>
+
+                <!-- Endpoint: GET /sessions/{id} -->
+                <mxCell id="v2-ep2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a2c4e;strokeColor=#38bdf8;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="263" width="178" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep2-m" value="GET" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#38bdf8;strokeColor=none;fontSize=9;fontStyle=1;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="273" width="38" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep2-p" value="/sessions/{id}" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="348" y="270" width="125" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep2-d" value="Perfil de sesión" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="290" width="178" height="16" as="geometry"/>
+                </mxCell>
+
+                <!-- Endpoint: GET /sessions/{id}/history -->
+                <mxCell id="v2-ep3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a2c4e;strokeColor=#38bdf8;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="316" width="178" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep3-m" value="GET" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#38bdf8;strokeColor=none;fontSize=9;fontStyle=1;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="326" width="38" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep3-p" value="/sessions/{id}/history" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontStyle=1;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="348" y="323" width="125" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep3-d" value="Historial del checkpointer" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="343" width="178" height="16" as="geometry"/>
+                </mxCell>
+
+                <!-- Endpoint: POST /sessions/{id}/chat ★ -->
+                <mxCell id="v2-ep4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a472a;strokeColor=#00ff88;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="369" width="178" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep4-m" value="POST" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#00ff88;strokeColor=none;fontSize=9;fontStyle=1;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="380" width="38" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep4-p" value="/sessions/{id}/chat" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontStyle=1;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="348" y="376" width="125" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep4-d" value="⭐ Chat multi-turno (principal)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#00ff88;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="398" width="178" height="16" as="geometry"/>
+                </mxCell>
+
+                <!-- Endpoint: GET /sessions (list) -->
+                <mxCell id="v2-ep5" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a2c4e;strokeColor=#38bdf8;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="427" width="178" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep5-m" value="GET" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#38bdf8;strokeColor=none;fontSize=9;fontStyle=1;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="437" width="38" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep5-p" value="/sessions" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="348" y="434" width="125" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep5-d" value="Listar sesiones" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="454" width="178" height="16" as="geometry"/>
+                </mxCell>
+
+                <!-- Endpoint: POST /recommend (legacy) -->
+                <mxCell id="v2-ep6" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2d2d2d;strokeColor=#64748b;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="480" width="178" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep6-m" value="POST" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64748b;strokeColor=none;fontSize=9;fontStyle=1;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="490" width="38" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep6-p" value="/recommend" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="348" y="487" width="125" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ep6-d" value="Legacy — compatibilidad" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="507" width="178" height="16" as="geometry"/>
+                </mxCell>
+
+                <!-- @startup -->
+                <mxCell id="v2-startup" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2937;strokeColor=#fbbf24;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="540" width="178" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-startup-t" value="@startup event" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#fbbf24;" parent="1" vertex="1">
+                    <mxGeometry x="298" y="545" width="178" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-startup-c" value="init_db()  →  nutria_sessions&#10;get_checkpointer()  →  PG / Mem" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=8;fontColor=#94a3b8;spacingLeft=6;" parent="1" vertex="1">
+                    <mxGeometry x="302" y="563" width="170" height="34" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- COLUMN 3 — LANGGRAPH AGENT CORE                        -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <mxCell id="v2-agent-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f3460;strokeColor=#ff6b6b;strokeWidth=4;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="518" y="100" width="400" height="490" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-agent-glow" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ff6b6b;strokeColor=none;opacity=12;" parent="1" vertex="1">
+                    <mxGeometry x="598" y="180" width="240" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-agent-hdr" value="🤖  LANGGRAPH AGENT CORE" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontStyle=1;fontColor=#ff6b6b;" parent="1" vertex="1">
+                    <mxGeometry x="528" y="112" width="380" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-agent-sub" value="create_react_agent (LangGraph prebuilt)  ·  src/agents/chef_agent.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="528" y="140" width="380" height="16" as="geometry"/>
+                </mxCell>
+
+                <!-- create_react_agent main box -->
+                <mxCell id="v2-react" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#ff6b6b;strokeWidth=2;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="598" y="164" width="190" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-react-icon" value="🔄" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=34;" parent="1" vertex="1">
+                    <mxGeometry x="643" y="170" width="100" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-react-title" value="create_react_agent" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#ff6b6b;" parent="1" vertex="1">
+                    <mxGeometry x="598" y="214" width="190" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-react-info" value="ReAct loop · tool calling" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#00d9ff;" parent="1" vertex="1">
+                    <mxGeometry x="598" y="232" width="190" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-react-loop" value="Observe → Think → Act → Repeat" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="598" y="246" width="190" height="24" as="geometry"/>
+                </mxCell>
+
+                <!-- profile_modifier -->
+                <mxCell id="v2-modifier" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2937;strokeColor=#fbbf24;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="164" width="58" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-modifier-t" value="profile_modifier" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontStyle=1;fontColor=#fbbf24;rotation=-90;" parent="1" vertex="1">
+                    <mxGeometry x="527" y="212" width="64" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-modifier-d" value="state_modifier" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=6;fontColor=#94a3b8;rotation=-90;" parent="1" vertex="1">
+                    <mxGeometry x="527" y="230" width="64" height="14" as="geometry"/>
+                </mxCell>
+
+                <!-- LLM GPT-4o -->
+                <mxCell id="v2-llm" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2d1f4e;strokeColor=#a855f7;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="290" width="130" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-llm-icon" value="💬" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=26;" parent="1" vertex="1">
+                    <mxGeometry x="558" y="294" width="74" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-llm-title" value="LLM" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#a855f7;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="328" width="130" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-llm-model" value="GPT-4o · temp 0.7" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="344" width="130" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-llm-t2" value="GPT-4o-mini (translator)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#c4b5fd;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="358" width="130" height="12" as="geometry"/>
+                </mxCell>
+
+                <!-- SYSTEM_TEMPLATE -->
+                <mxCell id="v2-prompt" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2937;strokeColor=#fbbf24;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="676" y="290" width="130" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-prompt-icon" value="📝" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=26;" parent="1" vertex="1">
+                    <mxGeometry x="704" y="294" width="74" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-prompt-title" value="SYSTEM_TEMPLATE" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#fbbf24;" parent="1" vertex="1">
+                    <mxGeometry x="676" y="328" width="130" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-prompt-file" value="src/prompts/chef_prompt.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="676" y="344" width="130" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-prompt-vars" value="{user_profile} · {restrictions}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#fdba74;" parent="1" vertex="1">
+                    <mxGeometry x="676" y="356" width="130" height="14" as="geometry"/>
+                </mxCell>
+
+                <!-- Pydantic models -->
+                <mxCell id="v2-models" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2937;strokeColor=#818cf8;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="386" width="276" height="145" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-models-t" value="📦  DATA MODELS (Pydantic)  —  src/models/schemas.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#818cf8;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="392" width="276" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-models-list" value="UserProfile  ·  AgentInput  ·  AgentOutput&#10;ChatRequest  ·  ChatResponse&#10;SessionInfo  ·  SessionCreateRequest&#10;Recipe  ·  NutritionalInfo  ·  Ingredient" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontColor=#c4b5fd;fontFamily=monospace;spacingLeft=12;" parent="1" vertex="1">
+                    <mxGeometry x="534" y="412" width="268" height="112" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- COLUMN 4 — PERSISTENCE                                 -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <mxCell id="v2-persist-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f3460;strokeColor=#38bdf8;strokeWidth=3;opacity=80;" parent="1" vertex="1">
+                    <mxGeometry x="518" y="608" width="400" height="252" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-persist-hdr" value="💾  PERSISTENCE LAYER  —  src/db/" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#38bdf8;" parent="1" vertex="1">
+                    <mxGeometry x="528" y="618" width="380" height="22" as="geometry"/>
+                </mxCell>
+
+                <!-- PostgresSaver -->
+                <mxCell id="v2-pg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a365d;strokeColor=#3b82f6;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="650" width="175" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-pg-icon" value="🐘" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="655" width="60" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-pg-title" value="PostgresSaver" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#3b82f6;" parent="1" vertex="1">
+                    <mxGeometry x="593" y="659" width="108" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-pg-sub" value="langgraph-checkpoint-postgres" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=8;fontColor=#60a5fa;" parent="1" vertex="1">
+                    <mxGeometry x="593" y="677" width="108" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-pg-feat" value="• Persistencia entre reinicios&#10;• GCP PostgreSQL&#10;• Setup idempotente&#10;• Requiere DATABASE_URL" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=8;fontColor=#94a3b8;spacingLeft=5;" parent="1" vertex="1">
+                    <mxGeometry x="534" y="694" width="166" height="44" as="geometry"/>
+                </mxCell>
+
+                <!-- MemorySaver -->
+                <mxCell id="v2-mem" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2937;strokeColor=#22c55e;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="718" y="650" width="175" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-mem-icon" value="⚡" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28;" parent="1" vertex="1">
+                    <mxGeometry x="718" y="655" width="60" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-mem-title" value="MemorySaver" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#22c55e;" parent="1" vertex="1">
+                    <mxGeometry x="781" y="659" width="108" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-mem-sub" value="langgraph.checkpoint.memory" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=8;fontColor=#86efac;" parent="1" vertex="1">
+                    <mxGeometry x="781" y="677" width="108" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-mem-feat" value="• Fallback sin DATABASE_URL&#10;• Memoria en proceso&#10;• Se pierde al reiniciar&#10;• Sin dependencias extras" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=8;fontColor=#94a3b8;spacingLeft=5;" parent="1" vertex="1">
+                    <mxGeometry x="722" y="694" width="166" height="44" as="geometry"/>
+                </mxCell>
+
+                <!-- OR label -->
+                <mxCell id="v2-or" value="OR" style="ellipse;whiteSpace=wrap;html=1;fillColor=#533483;strokeColor=#e94560;strokeWidth=2;fontSize=11;fontStyle=1;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="701" y="678" width="28" height="28" as="geometry"/>
+                </mxCell>
+
+                <!-- nutria_sessions -->
+                <mxCell id="v2-nstbl" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#14532d;strokeColor=#22c55e;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="754" width="363" height="92" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-nstbl-t" value="🗄️  nutria_sessions  (PostgreSQL table)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#22c55e;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="759" width="363" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-nstbl-f" value="src/db/session_store.py  —  create_session · get_session_profile · list_sessions · init_db()" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="777" width="363" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-nstbl-cols" value="session_id TEXT PK  ·  user_profile JSONB  ·  created_at TIMESTAMPTZ  ·  updated_at TIMESTAMPTZ" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#86efac;fontFamily=monospace;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="793" width="363" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-nstbl-note" value="checkpointer.setup() crea las tablas de LangGraph automáticamente (idempotente)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="809" width="363" height="33" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- COLUMN 5 — LANGSMITH + TOOLS                           -->
+                <!-- ══════════════════════════════════════════════════════ -->
+
+                <!-- LangSmith -->
+                <mxCell id="v2-ls-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2d1f4e;strokeColor=#a855f7;strokeWidth=3;" parent="1" vertex="1">
+                    <mxGeometry x="942" y="100" width="280" height="175" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ls-hdr" value="📊  LANGSMITH" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#a855f7;" parent="1" vertex="1">
+                    <mxGeometry x="952" y="112" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ls-sub" value="Observabilidad y trazabilidad automática" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="952" y="135" width="260" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ls-content" value="• LANGCHAIN_TRACING_V2=true&#10;• LANGCHAIN_API_KEY=...&#10;• LANGCHAIN_PROJECT=nutria&#10;• Trazas, tokens, latencia por invocación&#10;• Visualización en smith.langchain.com" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontColor=#94a3b8;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="952" y="154" width="260" height="112" as="geometry"/>
+                </mxCell>
+
+                <!-- Tools container -->
+                <mxCell id="v2-tools-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f3460;strokeColor=#fbbf24;strokeWidth=3;opacity=80;" parent="1" vertex="1">
+                    <mxGeometry x="942" y="292" width="280" height="568" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-tools-hdr" value="🔧  TOOLS LAYER" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#fbbf24;" parent="1" vertex="1">
+                    <mxGeometry x="1012" y="303" width="140" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-tools-sub" value="@tool decorated functions" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="952" y="325" width="260" height="14" as="geometry"/>
+                </mxCell>
+
+                <!-- Vision tool -->
+                <mxCell id="v2-t1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#06b6d4;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="954" y="348" width="254" height="105" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t1-icon" value="👁️" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="356" width="50" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t1-title" value="VISION TOOL" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#06b6d4;" parent="1" vertex="1">
+                    <mxGeometry x="1012" y="360" width="190" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t1-func" value="analyze_image_for_ingredients()" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontColor=#22d3ee;fontFamily=monospace;" parent="1" vertex="1">
+                    <mxGeometry x="1012" y="378" width="190" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t1-file" value="📄 src/tools/vision.py" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="398" width="150" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t1-desc" value="Detecta ingredientes en imágenes vía Gemini Vision AI" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="414" width="244" height="36" as="geometry"/>
+                </mxCell>
+
+                <!-- Recipe Search tool -->
+                <mxCell id="v2-t2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#f97316;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="954" y="463" width="254" height="105" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t2-icon" value="🔍" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="471" width="50" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t2-title" value="RECIPE SEARCH TOOL" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#f97316;" parent="1" vertex="1">
+                    <mxGeometry x="1012" y="475" width="190" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t2-func" value="find_recipes_by_ingredients()" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontColor=#fdba74;fontFamily=monospace;" parent="1" vertex="1">
+                    <mxGeometry x="1012" y="493" width="190" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t2-file" value="📄 src/tools/nutrition.py" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="513" width="150" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t2-desc" value="Busca recetas en Spoonacular por ingredientes y restricciones" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="529" width="244" height="36" as="geometry"/>
+                </mxCell>
+
+                <!-- Nutrition tool -->
+                <mxCell id="v2-t3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#22c55e;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="954" y="578" width="254" height="105" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t3-icon" value="🍎" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="586" width="50" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t3-title" value="NUTRITION TOOL" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#22c55e;" parent="1" vertex="1">
+                    <mxGeometry x="1012" y="590" width="190" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t3-func" value="get_recipe_details()" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontColor=#86efac;fontFamily=monospace;" parent="1" vertex="1">
+                    <mxGeometry x="1012" y="608" width="190" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t3-file" value="📄 src/tools/nutrition.py" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="628" width="150" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t3-desc" value="Obtiene nutrición: Calorías, Proteínas, Carbos, Grasas" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="644" width="244" height="36" as="geometry"/>
+                </mxCell>
+
+                <!-- Translation tool -->
+                <mxCell id="v2-t4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#9333ea;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="954" y="693" width="254" height="105" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t4-icon" value="🔤" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="701" width="50" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t4-title" value="TRANSLATION TOOL" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#9333ea;" parent="1" vertex="1">
+                    <mxGeometry x="1012" y="705" width="190" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t4-func" value="translate_es_to_en()" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontColor=#c084fc;fontFamily=monospace;" parent="1" vertex="1">
+                    <mxGeometry x="1012" y="723" width="190" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t4-file" value="📄 src/tools/translator.py" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="743" width="150" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-t4-desc" value="Español → Inglés (obligatorio antes de Spoonacular)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=8;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="759" width="244" height="36" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- COLUMN 6 — EXTERNAL APIs                               -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <mxCell id="v2-ext-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f3460;strokeColor=#a855f7;strokeWidth=3;opacity=80;" parent="1" vertex="1">
+                    <mxGeometry x="1250" y="100" width="290" height="760" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-ext-hdr" value="☁️  EXTERNAL APIs" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#a855f7;" parent="1" vertex="1">
+                    <mxGeometry x="1310" y="112" width="170" height="24" as="geometry"/>
+                </mxCell>
+
+                <!-- OpenAI -->
+                <mxCell id="v2-oai" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1f2937;strokeColor=#a855f7;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1263" y="148" width="264" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-oai-icon" value="⚡" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=34;" parent="1" vertex="1">
+                    <mxGeometry x="1272" y="154" width="54" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-oai-title" value="OPENAI API" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#a855f7;" parent="1" vertex="1">
+                    <mxGeometry x="1328" y="158" width="190" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-oai-m1" value="GPT-4o (agente principal)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#c4b5fd;" parent="1" vertex="1">
+                    <mxGeometry x="1328" y="180" width="190" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-oai-m2" value="GPT-4o-mini (traductor)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#c4b5fd;" parent="1" vertex="1">
+                    <mxGeometry x="1328" y="198" width="190" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-oai-feat" value="✓ Function / Tool Calling&#10;✓ Razonamiento y síntesis final&#10;✓ Respuesta siempre en Español" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1268" y="218" width="254" height="54" as="geometry"/>
+                </mxCell>
+
+                <!-- Gemini -->
+                <mxCell id="v2-gem" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a365d;strokeColor=#3b82f6;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1263" y="292" width="264" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-gem-icon" value="🔷" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=34;" parent="1" vertex="1">
+                    <mxGeometry x="1272" y="300" width="54" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-gem-title" value="GOOGLE GEMINI" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#3b82f6;" parent="1" vertex="1">
+                    <mxGeometry x="1328" y="304" width="190" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-gem-model" value="gemini-1.5-flash (Vision AI)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#60a5fa;" parent="1" vertex="1">
+                    <mxGeometry x="1328" y="326" width="190" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-gem-feat" value="✓ Comprensión multimodal de imágenes&#10;✓ Detección de alimentos e ingredientes&#10;✓ Modelo Flash — alta velocidad&#10;✓ Free Tier disponible" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1268" y="350" width="254" height="84" as="geometry"/>
+                </mxCell>
+
+                <!-- Spoonacular -->
+                <mxCell id="v2-spoon" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#14532d;strokeColor=#22c55e;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1263" y="456" width="264" height="175" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-spoon-icon" value="🥗" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=34;" parent="1" vertex="1">
+                    <mxGeometry x="1272" y="464" width="54" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-spoon-title" value="SPOONACULAR API" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#22c55e;" parent="1" vertex="1">
+                    <mxGeometry x="1328" y="468" width="190" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-spoon-sub" value="Recipe &amp; Nutrition Database" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#86efac;" parent="1" vertex="1">
+                    <mxGeometry x="1328" y="490" width="190" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-spoon-feat" value="✓ +5 000 recetas en BD&#10;✓ Búsqueda por ingredientes&#10;✓ Macronutrientes completos&#10;✓ Filtros dietéticos&#10;✓ Instrucciones paso a paso&#10;✓ Free Tier: 150 req/día" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1268" y="514" width="254" height="112" as="geometry"/>
+                </mxCell>
+
+                <!-- Config env -->
+                <mxCell id="v2-cfg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#475569;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1263" y="650" width="264" height="195" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-cfg-t" value="⚙️  CONFIG  —  .env" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="1263" y="656" width="264" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-cfg-vars" value="OPENAI_API_KEY=sk-...&#10;GOOGLE_STUDIO_AI_API_KEY=AIza...&#10;SPOONACULAR_API_KEY=...&#10;&#10;DATABASE_URL=postgresql://...  ← opcional&#10;&#10;LANGCHAIN_API_KEY=lsv2-...&#10;LANGCHAIN_TRACING_V2=true&#10;LANGCHAIN_PROJECT=nutria&#10;LANGSMITH_ENDPOINT=https://..." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=8;fontColor=#64748b;fontFamily=monospace;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1267" y="676" width="256" height="164" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- ARROWS / FLOWS                                         -->
+                <!-- ══════════════════════════════════════════════════════ -->
+
+                <!-- UI → API (HTTP) -->
+                <mxCell id="v2-f1" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=3;strokeColor=#e94560;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="260" y="400" as="sourcePoint"/>
+                        <mxPoint x="285" y="400" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="v2-f1-lbl" value="HTTP" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#e94560;fontStyle=1;" parent="v2-f1" vertex="1" connectable="0">
+                    <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint y="-10" as="offset"/></mxGeometry>
+                </mxCell>
+
+                <!-- API → Agent (invoke) -->
+                <mxCell id="v2-f2" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=3;strokeColor=#00d9ff;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="490" y="385" as="sourcePoint"/>
+                        <mxPoint x="518" y="385" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="v2-f2-lbl" value="invoke(session_id)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#00d9ff;fontStyle=1;" parent="v2-f2" vertex="1" connectable="0">
+                    <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint y="-10" as="offset"/></mxGeometry>
+                </mxCell>
+
+                <!-- Agent ↔ Persistence (checkpoint) -->
+                <mxCell id="v2-f3" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;strokeWidth=3;strokeColor=#38bdf8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="718" y="590" as="sourcePoint"/>
+                        <mxPoint x="718" y="608" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="v2-f3-lbl" value="load / save checkpoint" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#38bdf8;fontStyle=1;" parent="v2-f3" vertex="1" connectable="0">
+                    <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint x="30" y="0" as="offset"/></mxGeometry>
+                </mxCell>
+
+                <!-- Agent → LangSmith (trace) -->
+                <mxCell id="v2-f4" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#a855f7;dashed=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="918" y="200" as="sourcePoint"/>
+                        <mxPoint x="942" y="190" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="v2-f4-lbl" value="trace" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#a855f7;fontStyle=1;" parent="v2-f4" vertex="1" connectable="0">
+                    <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint y="-10" as="offset"/></mxGeometry>
+                </mxCell>
+
+                <!-- Agent → Tools (tool call) -->
+                <mxCell id="v2-f5" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=3;strokeColor=#fbbf24;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="918" y="400" as="sourcePoint"/>
+                        <mxPoint x="942" y="500" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="v2-f5-lbl" value="tool call" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#fbbf24;fontStyle=1;" parent="v2-f5" vertex="1" connectable="0">
+                    <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint y="-10" as="offset"/></mxGeometry>
+                </mxCell>
+
+                <!-- Tools → External APIs (API call) -->
+                <mxCell id="v2-f6" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=3;strokeColor=#a855f7;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1222" y="500" as="sourcePoint"/>
+                        <mxPoint x="1250" y="500" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="v2-f6-lbl" value="API call" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#a855f7;fontStyle=1;" parent="v2-f6" vertex="1" connectable="0">
+                    <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint y="-10" as="offset"/></mxGeometry>
+                </mxCell>
+
+                <!-- ─── FOOTER ──────────────────────────────────────────── -->
+                <mxCell id="v2-footer" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#0f3460;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="878" width="1760" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-footer-flow" value="👤 Usuario  →  📱 Streamlit Chat  →  🔌 FastAPI /sessions/{id}/chat  →  🤖 LangGraph ReAct  →  💾 Checkpointer  →  🔧 Tools  →  ☁️ APIs  →  📝 Respuesta (ES)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="886" width="1600" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v2-footer-stack" value="Python 3.12  ·  LangGraph 0.4.5  ·  LangChain 0.2.x  ·  FastAPI  ·  Streamlit  ·  psycopg 3.2.6  ·  Pydantic v2  ·  GPT-4o  ·  Gemini 1.5 Flash  ·  Spoonacular" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="912" width="1600" height="18" as="geometry"/>
+                </mxCell>
+
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="NutrIA v3 - RAG + Elasticsearch" id="v3-rag-es">
+        <mxGraphModel dx="1354" dy="994" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1100" math="0" shadow="1">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+
+                <!-- ─── BACKGROUND ─────────────────────────────────────────── -->
+                <mxCell id="v3-bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a1a2e;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry width="1900" height="1100" as="geometry"/>
+                </mxCell>
+
+                <!-- ─── HEADER ─────────────────────────────────────────────── -->
+                <mxCell id="v3-hbg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#0f3460;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="10" width="1860" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-title" value="🥗  NutrIA v3 — RAG + ELASTICSEARCH ARCHITECTURE" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=26;fontStyle=1;fontColor=#e94560;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="18" width="1500" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-sub" value="create_react_agent (LangGraph)  ·  Elasticsearch Hybrid Search (KNN + BM25 + RRF)  ·  text-embedding-3-small  ·  PostgresSaver / MemorySaver  ·  LangSmith" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="54" width="1500" height="22" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════════ -->
+                <!-- COLUMN 1 — UI + API                                        -->
+                <!-- ══════════════════════════════════════════════════════════ -->
+                <mxCell id="v3-ui-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f3460;strokeColor=#e94560;strokeWidth=3;opacity=80;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="100" width="230" height="740" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ui-hdr" value="📱  UI LAYER" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#e94560;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="112" width="210" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-streamlit" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#533483;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="145" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-st-title" value="STREAMLIT" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="150" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-st-detail" value="• Chat conversacional&#10;• Sidebar: perfil + sesión&#10;• session_id en state" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="172" width="200" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-fastapi" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#00ff88;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="240" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-fa-title" value="⚡ FastAPI" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#00ff88;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="248" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-fa-eps" value="POST /sessions&#10;GET  /sessions/{id}&#10;GET  /sessions/{id}/history&#10;POST /sessions/{id}/chat&#10;POST /recommend (legacy)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="270" width="200" height="85" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-cli" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#533483;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="375" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-cli-title" value="💻 nutria_cli.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="382" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-cli-detail" value="Multi-turn loop · UUID session_id" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="402" width="200" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-profile" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#00d9ff;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="450" width="200" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-prof-title" value="👤 USER PROFILE" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="458" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-prof-detail" value="▸ Nombre / Edad&#10;▸ Objetivos de salud&#10;▸ Restricciones dietéticas&#10;▸ Alergias&#10;▸ session_id → thread_id" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=10;fontColor=#94a3b8;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="480" width="200" height="130" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════════ -->
+                <!-- COLUMN 2 — LANGGRAPH AGENT                                 -->
+                <!-- ══════════════════════════════════════════════════════════ -->
+                <mxCell id="v3-agent-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f3460;strokeColor=#00d9ff;strokeWidth=3;opacity=80;" parent="1" vertex="1">
+                    <mxGeometry x="290" y="100" width="310" height="740" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-agent-hdr" value="🤖  LANGGRAPH ReAct AGENT" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="112" width="290" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-llm" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#e94560;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="145" width="280" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-llm-title" value="🧠 GPT-4o (LLM)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#e94560;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="152" width="280" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-llm-detail" value="temperature=0.7  ·  tool calling&#10;create_react_agent (LangGraph prebuilt)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="176" width="280" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-modifier" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#533483;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="240" width="280" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-mod-title" value="⚙️ profile_modifier" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#533483;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="248" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-mod-detail" value="Inyecta SystemMessage(user_profile, restrictions)&#10;desde config[configurable] cada turno" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="268" width="280" height="36" as="geometry"/>
+                </mxCell>
+
+                <!-- Tools list -->
+                <mxCell id="v3-tools-hdr" value="TOOLS REGISTRADAS" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="322" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-t1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#533483;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="345" width="280" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-t1-lbl" value="👁️ analyze_image_for_ingredients" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="355" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-t2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#533483;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="392" width="280" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-t2-lbl" value="🔤 translate_es_to_en" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="402" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-t3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a3a2e;strokeColor=#00ff88;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="439" width="280" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-t3-lbl" value="🗂️ search_peruvian_recipes  ← RAG" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#00ff88;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="449" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-t3-sub" value="Elasticsearch híbrido + filtros metadata" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="466" width="280" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-t4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#533483;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="496" width="280" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-t4-lbl" value="🍎 find_recipes_by_ingredients (Spoonacular)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="506" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-t5" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#533483;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="543" width="280" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-t5-lbl" value="📊 get_recipe_details (Spoonacular)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="553" width="280" height="20" as="geometry"/>
+                </mxCell>
+
+                <!-- Checkpointer -->
+                <mxCell id="v3-ckpt-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#e94560;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="600" width="280" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ckpt-hdr" value="💾 CHECKPOINTER" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#e94560;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="608" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-pg-box" value="🐘 PostgresSaver (GCP)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a3560;strokeColor=#4a90d9;strokeWidth=1;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="315" y="632" width="120" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-mem-box" value="🧠 MemorySaver (fallback)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a3560;strokeColor=#64748b;strokeWidth=1;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="445" y="632" width="130" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ckpt-sub" value="thread_id = session_id · historial persistido automáticamente" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="670" width="280" height="32" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════════ -->
+                <!-- COLUMN 3 — RAG PIPELINE                                    -->
+                <!-- ══════════════════════════════════════════════════════════ -->
+                <mxCell id="v3-rag-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0a2e1a;strokeColor=#00ff88;strokeWidth=3;opacity=90;" parent="1" vertex="1">
+                    <mxGeometry x="650" y="100" width="370" height="740" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-rag-hdr" value="🗂️  RAG PIPELINE" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#00ff88;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="112" width="350" height="24" as="geometry"/>
+                </mxCell>
+
+                <!-- Step 1: LOAD -->
+                <mxCell id="v3-load-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#00d9ff;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="148" width="340" height="175" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-load-badge" value="1. LOAD" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#00d9ff;strokeColor=none;fontSize=11;fontStyle=1;fontColor=#1a1a2e;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="148" width="80" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-load-title" value="Document Loaders (LangChain)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="150" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-loader-json" value="📄 JSONLoader — recetas_peruanas.json (24 recetas)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="178" width="330" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-loader-sp" value="📄 JSONLoader — spoonacular_peruvian.json" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="200" width="330" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-loader-pdf" value="📑 PyPDFLoader — PDFs MINCUL / APEGA" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="222" width="330" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-loader-web" value="🌐 WebBaseLoader — páginas Peru.info" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="244" width="330" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-loader-rec" value="🕷️ RecursiveUrlLoader — RecetasGratis.net" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="266" width="330" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-loader-hf" value="🤗 HuggingFaceDatasetLoader — gastronomia-peruana" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="288" width="330" height="20" as="geometry"/>
+                </mxCell>
+
+                <!-- Step 2: SPLIT -->
+                <mxCell id="v3-split-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#f59e0b;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="335" width="340" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-split-badge" value="2. SPLIT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f59e0b;strokeColor=none;fontSize=11;fontStyle=1;fontColor=#1a1a2e;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="335" width="80" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-split-d1" value="Recetas JSON → 1 receta = 1 Document (sin split)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="362" width="330" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-split-d2" value="PDFs → RecursiveCharacterTextSplitter (chunk=1000, overlap=100)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="384" width="330" height="32" as="geometry"/>
+                </mxCell>
+
+                <!-- Step 3: EMBED -->
+                <mxCell id="v3-embed-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#a855f7;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="437" width="340" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-embed-badge" value="3. EMBED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a855f7;strokeColor=none;fontSize=11;fontStyle=1;fontColor=#fff;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="437" width="80" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-embed-d1" value="OpenAI text-embedding-3-small (1536 dims)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="464" width="330" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-embed-d2" value="Embeddings generados por ElasticsearchStore en ingesta" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#64748b;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="484" width="330" height="26" as="geometry"/>
+                </mxCell>
+
+                <!-- Step 4: STORE -->
+                <mxCell id="v3-store-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#e94560;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="529" width="340" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-store-badge" value="4. STORE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e94560;strokeColor=none;fontSize=11;fontStyle=1;fontColor=#fff;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="529" width="80" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-store-d1" value="ElasticsearchStore → índice nutria-recetas-peruanas" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="556" width="330" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-store-d2" value="Estrategia: ApproxRetrievalStrategy(hybrid=True, rrf=True)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#64748b;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="576" width="330" height="26" as="geometry"/>
+                </mxCell>
+
+                <!-- Step 5: RETRIEVAL -->
+                <mxCell id="v3-ret-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#00ff88;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="621" width="340" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ret-badge" value="5. RETRIEVAL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#00ff88;strokeColor=none;fontSize=11;fontStyle=1;fontColor=#1a1a2e;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="621" width="95" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ret-d1" value="similarity_search(query, k=3, filter=filters)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="648" width="330" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ret-d2" value="Filtros: region · meal_type · es_vegetariano · es_vegano&#10;         es_sin_gluten · tiene_mariscos · max_calories · max_prep_time" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=10;fontColor=#64748b;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="668" width="330" height="46" as="geometry"/>
+                </mxCell>
+
+                <!-- Ingest CLI -->
+                <mxCell id="v3-ingest-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#f59e0b;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="733" width="340" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ingest-title" value="📥 ingest_recipes.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#f59e0b;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="740" width="340" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ingest-detail" value="--source [json|spoonacular|pdf|web|huggingface|all]&#10;--dry-run  (solo stats sin indexar)&#10;--clear    (borra singleton y reindexa)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="665" y="762" width="340" height="55" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════════ -->
+                <!-- COLUMN 4 — ELASTICSEARCH + EXTERNAL APIS                  -->
+                <!-- ══════════════════════════════════════════════════════════ -->
+                <mxCell id="v3-es-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1a0a2e;strokeColor=#a855f7;strokeWidth=3;opacity=90;" parent="1" vertex="1">
+                    <mxGeometry x="1070" y="100" width="340" height="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-es-hdr" value="🔍  ELASTICSEARCH (GCP)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#a855f7;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="112" width="320" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-es-index" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#a855f7;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="148" width="310" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-es-index-title" value="📦 índice: nutria-recetas-peruanas" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#a855f7;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="154" width="310" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-es-fields" value="Campos metadata:&#10;  title · region · city · meal_type · cuisine_style&#10;  es_vegetariano · es_vegano · es_sin_gluten&#10;  tiene_mariscos · tiene_gluten · tiene_lacteos&#10;  main_protein · calories_per_serving · protein_g&#10;  prep_time_min · difficulty · is_typical" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="176" width="310" height="96" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-es-search" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#00ff88;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="290" width="310" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-es-search-title" value="Búsqueda Híbrida" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#00ff88;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="298" width="310" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-es-knn" value="🧮 KNN semántico (vector cosine)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="320" width="310" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-es-bm25" value="📝 BM25 full-text ([Nombre][Ingredientes][Instrucciones])" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="342" width="310" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-es-rrf" value="🎯 RRF (Reciprocal Rank Fusion) — fusión final" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="364" width="310" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-es-conn" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#64748b;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="402" width="310" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-es-conn-lbl" value="🌐 GCP Elastic Cloud · ELASTICSEARCH_URL&#10;🔑 ELASTICSEARCH_API_KEY" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="410" width="310" height="34" as="geometry"/>
+                </mxCell>
+
+                <!-- EXTERNAL APIS -->
+                <mxCell id="v3-ext-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f3460;strokeColor=#f59e0b;strokeWidth=3;opacity=80;" parent="1" vertex="1">
+                    <mxGeometry x="1070" y="560" width="340" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ext-hdr" value="🌐  EXTERNAL APIs" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#f59e0b;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="572" width="320" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-gemini" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#4285f4;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="606" width="310" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-gem-lbl" value="🔵 Google Gemini 1.5 Flash" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#4285f4;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="614" width="310" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-gem-sub" value="analyze_image_for_ingredients · Free Tier" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="636" width="310" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-openai" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#00d9ff;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="678" width="310" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-oai-lbl" value="⚡ OpenAI (GPT-4o + GPT-4o-mini + Embeddings)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="686" width="310" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-oai-sub" value="LLM principal · translator · text-embedding-3-small" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="708" width="310" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-spoon" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#00ff88;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="750" width="310" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-sp-lbl" value="🍎 Spoonacular API" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#00ff88;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="758" width="310" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-sp-sub" value="Recetas internacionales · 150 req/día (Free Tier)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="1085" y="780" width="310" height="24" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════════ -->
+                <!-- COLUMN 5 — PERSISTENCE + OBSERVABILITY                    -->
+                <!-- ══════════════════════════════════════════════════════════ -->
+                <mxCell id="v3-db-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f3460;strokeColor=#4a90d9;strokeWidth=3;opacity=80;" parent="1" vertex="1">
+                    <mxGeometry x="1460" y="100" width="320" height="380" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-db-hdr" value="🗄️  PERSISTENCE (GCP)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#4a90d9;" parent="1" vertex="1">
+                    <mxGeometry x="1470" y="112" width="300" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-pg-main" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#4a90d9;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1475" y="148" width="290" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-pg-title" value="🐘 PostgreSQL (Cloud SQL)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#4a90d9;" parent="1" vertex="1">
+                    <mxGeometry x="1475" y="156" width="290" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-pg-t1" value="checkpoints  (LangGraph auto)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1475" y="182" width="290" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-pg-t2" value="checkpoint_blobs  (LangGraph auto)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1475" y="204" width="290" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-pg-t3" value="checkpoint_writes  (LangGraph auto)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1475" y="226" width="290" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-pg-t4" value="nutria_sessions  (CRUD custom)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1475" y="248" width="290" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-pg-note" value="psycopg v3 + ConnectionPool · setup() idempotente" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="1475" y="272" width="290" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-mem-main" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#64748b;strokeWidth=1;strokeDasharray=6 3;" parent="1" vertex="1">
+                    <mxGeometry x="1475" y="302" width="290" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-mem-title" value="🧠 MemorySaver (fallback)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="1475" y="312" width="290" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-mem-sub" value="Activo cuando DATABASE_URL no está configurado" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="1475" y="334" width="290" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-db-note" value="get_checkpointer() → PostgresSaver o MemorySaver" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="1475" y="372" width="290" height="20" as="geometry"/>
+                </mxCell>
+
+                <!-- LangSmith -->
+                <mxCell id="v3-ls-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2d1a00;strokeColor=#f59e0b;strokeWidth=3;opacity=90;" parent="1" vertex="1">
+                    <mxGeometry x="1460" y="500" width="320" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ls-hdr" value="📊  LANGSMITH" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#f59e0b;" parent="1" vertex="1">
+                    <mxGeometry x="1470" y="512" width="300" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ls-d1" value="Trazas automáticas por invocación" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1470" y="544" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ls-d2" value="Tools usadas · tokens · latencia · errores" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1470" y="566" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ls-d3" value="Proyecto: nutria · LANGCHAIN_TRACING_V2=true" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1470" y="588" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ls-d4" value="Incluye trazas de search_peruvian_recipes (RAG)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#f59e0b;spacingLeft=8;" parent="1" vertex="1">
+                    <mxGeometry x="1470" y="610" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-ls-url" value="smith.langchain.com → proyecto nutria" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="1470" y="640" width="300" height="30" as="geometry"/>
+                </mxCell>
+
+                <!-- ══════════════════════════════════════════════════════════ -->
+                <!-- ARROWS                                                      -->
+                <!-- ══════════════════════════════════════════════════════════ -->
+                <!-- UI → Agent -->
+                <mxCell id="v3-arr-ui-ag" value="session_id + message" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#00d9ff;strokeWidth=2;fontColor=#00d9ff;fontSize=10;" parent="1" source="v3-fastapi" target="v3-agent-bg" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <!-- Agent → RAG tool -->
+                <mxCell id="v3-arr-ag-rag" value="recetas peruanas?" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#00ff88;strokeWidth=3;fontColor=#00ff88;fontSize=10;" parent="1" source="v3-t3" target="v3-rag-bg" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <!-- RAG → ES -->
+                <mxCell id="v3-arr-rag-es" value="similarity_search + filters" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#a855f7;strokeWidth=2;fontColor=#a855f7;fontSize=10;" parent="1" source="v3-rag-bg" target="v3-es-bg" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <!-- Agent → DB -->
+                <mxCell id="v3-arr-ag-db" value="checkpointing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.4;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;strokeColor=#4a90d9;strokeWidth=2;fontColor=#4a90d9;fontSize=10;" parent="1" source="v3-agent-bg" target="v3-db-bg" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <!-- Agent → LangSmith (dashed) -->
+                <mxCell id="v3-arr-ag-ls" value="tracing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.65;exitDx=0;exitDy=0;entryX=0;entryY=0.15;entryDx=0;entryDy=0;strokeColor=#f59e0b;strokeWidth=1;strokeDasharray=6 3;fontColor=#f59e0b;fontSize=10;" parent="1" source="v3-agent-bg" target="v3-ls-bg" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <!-- Agent → External (Gemini) -->
+                <mxCell id="v3-arr-ag-ext" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#f59e0b;strokeWidth=2;" parent="1" source="v3-agent-bg" target="v3-ext-bg" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <!-- Ingest → ES -->
+                <mxCell id="v3-arr-ingest-es" value="add_documents" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.9;entryDx=0;entryDy=0;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f59e0b;fontSize=10;strokeDasharray=4 2;" parent="1" source="v3-ingest-box" target="v3-es-bg" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- ─── FOOTER ──────────────────────────────────────────────── -->
+                <mxCell id="v3-footer-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#0f3460;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="858" width="1860" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-footer-title" value="NutrIA v3 — Tu Chef y Nutricionista Personal con IA" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#e94560;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="858" width="1700" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="v3-footer-stack" value="Python 3.12  ·  LangGraph  ·  LangChain  ·  FastAPI  ·  Streamlit  ·  Elasticsearch 8.x (GCP)  ·  psycopg 3  ·  text-embedding-3-small  ·  GPT-4o  ·  Gemini 1.5 Flash  ·  Spoonacular" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="882" width="1700" height="18" as="geometry"/>
+                </mxCell>
+
+            </root>
+        </mxGraphModel>
+    </diagram>
 </mxfile>
