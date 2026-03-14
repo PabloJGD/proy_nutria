@@ -1,62 +1,157 @@
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
-from pydantic import ValidationError
-import shutil
 import os
 import json
-from src.models.schemas import AgentInput, UserProfile
-from src.agents.chef_agent import process_request
+import uuid
+import shutil
+from typing import List
 
-app = FastAPI(title="AI Chef Agent", description="Generates recipes based on ingredients and profile.")
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from pydantic import ValidationError
+
+from src.models.schemas import (
+    AgentInput,
+    UserProfile,
+    ChatResponse,
+    SessionInfo,
+    SessionCreateRequest,
+)
+from src.agents.chef_agent import process_request, checkpointer as _checkpointer
+from src.db.session_store import init_db, create_session, get_session_profile, list_sessions
+
+app = FastAPI(title="NutrIA API", description="Agente conversacional de nutrición con IA.")
+
+
+@app.on_event("startup")
+async def startup():
+    init_db()
+
+
+# ─── Endpoints de sesión ──────────────────────────────────────────────────────
+
+@app.post("/sessions", response_model=SessionInfo)
+async def create_session_endpoint(body: SessionCreateRequest):
+    """Crea una nueva sesión con el perfil del usuario."""
+    session_id = str(uuid.uuid4())
+    profile_dict = body.user_profile.model_dump()
+    info = create_session(session_id, profile_dict)
+    return SessionInfo(**info)
+
+
+@app.get("/sessions", response_model=List[SessionInfo])
+async def list_sessions_endpoint():
+    """Lista todas las sesiones disponibles."""
+    sessions = list_sessions()
+    return [SessionInfo(**s) for s in sessions]
+
+
+@app.get("/sessions/{session_id}", response_model=SessionInfo)
+async def get_session_endpoint(session_id: str):
+    """Retorna el perfil de una sesión."""
+    profile = get_session_profile(session_id)
+    if profile is None:
+        raise HTTPException(status_code=404, detail="Sesión no encontrada.")
+    return SessionInfo(session_id=session_id, user_profile=profile, created_at="")
+
+
+@app.get("/sessions/{session_id}/history")
+async def get_history(session_id: str):
+    """Retorna el historial de mensajes de una sesión (desde el checkpointer)."""
+    try:
+        config = {"configurable": {"thread_id": session_id}}
+        state = _checkpointer.get(config)
+        if state is None:
+            return {"messages": []}
+        messages = []
+        for msg in state.get("channel_values", {}).get("messages", []):
+            role = "human" if msg.__class__.__name__ == "HumanMessage" else "ai"
+            messages.append({"role": role, "content": msg.content})
+        return {"messages": messages}
+    except Exception as e:
+        return {"messages": [], "error": str(e)}
+
+
+# ─── Endpoint de chat conversacional ─────────────────────────────────────────
+
+@app.post("/sessions/{session_id}/chat", response_model=ChatResponse)
+async def chat(
+    session_id: str,
+    message: str = Form(...),
+    image: UploadFile = File(None),
+):
+    """Envía un mensaje a la sesión y retorna la respuesta del agente."""
+    profile_dict = get_session_profile(session_id)
+    if profile_dict is None:
+        raise HTTPException(status_code=404, detail="Sesión no encontrada.")
+
+    try:
+        profile = UserProfile(**profile_dict)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Perfil de sesión inválido: {e}")
+
+    image_path = None
+    if image:
+        os.makedirs("temp", exist_ok=True)
+        image_path = f"temp/{image.filename}"
+        with open(image_path, "wb") as buffer:
+            shutil.copyfileobj(image.file, buffer)
+
+    agent_input = AgentInput(
+        text_description=message,
+        image_data=image_path,
+        user_profile=profile,
+    )
+
+    try:
+        result = process_request(session_id, agent_input)
+        return ChatResponse(response=result, session_id=session_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        if image_path and os.path.exists(image_path):
+            os.remove(image_path)
+
+
+# ─── Endpoint legacy (compatibilidad) ────────────────────────────────────────
 
 @app.post("/recommend")
 async def recommend_recipe(
     text_description: str = Form(None),
     image: UploadFile = File(None),
-    user_profile: str = Form(..., description="JSON string of UserProfile")
+    user_profile: str = Form(..., description="JSON string of UserProfile"),
 ):
-    """
-    Endpoint to get recipe recommendations.
-    Accepts text description, an image file, and a JSON user profile.
-    """
-    
-    # Check inputs
+    """Endpoint legacy — crea una sesión temporal y responde."""
     if not text_description and not image:
-        raise HTTPException(status_code=400, detail="Provide at least text description or an image.")
-    
-    # Parse Profile
+        raise HTTPException(status_code=400, detail="Proporciona texto o imagen.")
+
     try:
         profile_dict = json.loads(user_profile)
         profile = UserProfile(**profile_dict)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid user_profile JSON: {str(e)}")
-    
+        raise HTTPException(status_code=400, detail=f"user_profile JSON inválido: {e}")
+
     image_path = None
     if image:
-        # Save temp file
         os.makedirs("temp", exist_ok=True)
         image_path = f"temp/{image.filename}"
         with open(image_path, "wb") as buffer:
             shutil.copyfileobj(image.file, buffer)
-            
-    # Construct Input
+
+    session_id = str(uuid.uuid4())
     agent_input = AgentInput(
-        image_data=image_path if image_path else None,
+        image_data=image_path,
         text_description=text_description,
-        user_profile=profile
+        user_profile=profile,
     )
-    
-    # Run Agent
+
     try:
-        result = process_request(agent_input)
-        
-        # Cleanup
-        if image_path and os.path.exists(image_path):
-            os.remove(image_path)
-            
+        result = process_request(session_id, agent_input)
         return {"recommendation": result}
     except Exception as e:
         return {"error": str(e)}
+    finally:
+        if image_path and os.path.exists(image_path):
+            os.remove(image_path)
+
 
 @app.get("/")
 def home():
-    return {"message": "AI Chef API is running."}
+    return {"message": "NutrIA API is running."}
