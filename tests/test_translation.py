@@ -6,8 +6,9 @@ from dotenv import load_dotenv
 # Add project root to path
 sys.path.append(os.getcwd())
 
-load_dotenv(dotenv_path="configs/.env")
+load_dotenv()  # carga .env del directorio raíz
 
+import uuid
 from src.models.schemas import AgentInput, UserProfile
 from src.agents.chef_agent import process_request
 
@@ -19,15 +20,15 @@ def test_translation():
         allergies=["Ninguna"],
         health_goals="Comida saludable"
     )
-    
+
     # Input en español
     request = AgentInput(
         text_description="pollo y brócoli",
         user_profile=profile
     )
-    
+
     print("Iniciando procesamiento con ingredientes en español...")
-    result = process_request(request)
+    result = process_request(str(uuid.uuid4()), request)
     print("\nResultado del Agente:")
     print("="*50)
     print(result)
