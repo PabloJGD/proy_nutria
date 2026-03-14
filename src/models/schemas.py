@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any
 from pydantic import BaseModel, Field
 
 
@@ -151,20 +151,32 @@ class AgentInput(BaseModel):
 class AgentOutput(BaseModel):
     """
     Estructura de salida del agente.
-    
-    Después de que el agente procesa la entrada (analiza imagen, busca recetas,
-    obtiene nutrición), devuelve este modelo con:
-    
-    Campos:
-        - recipes: Lista de recetas recomendadas (ordenadas por relevancia)
-        - advice: Consejo nutricional general basado en el perfil
-    
-    Ejemplo de respuesta:
-        >>> salida = AgentOutput(
-        ...     recipes=[Recipe(title="Pollo al Horno", ...)],
-        ...     advice="Dado tu objetivo de ganar músculo, estas recetas 
-        ...             tienen alto contenido proteico."
-        ... )
     """
     recipes: List[Recipe] = Field(description="Lista de recetas recomendadas")
     advice: Optional[str] = Field(None, description="Consejo nutricional general")
+
+
+# ─── Schemas conversacionales ────────────────────────────────────────────────
+
+class ChatRequest(BaseModel):
+    """Cuerpo de una petición de chat a /sessions/{session_id}/chat."""
+    message: str = Field(description="Mensaje de texto del usuario")
+    image_data: Optional[str] = Field(None, description="Ruta o URL de imagen (opcional)")
+
+
+class ChatResponse(BaseModel):
+    """Respuesta de /sessions/{session_id}/chat."""
+    response: str = Field(description="Respuesta del agente en español")
+    session_id: str = Field(description="ID de la sesión activa")
+
+
+class SessionInfo(BaseModel):
+    """Información de una sesión."""
+    session_id: str
+    user_profile: Dict[str, Any]
+    created_at: str
+
+
+class SessionCreateRequest(BaseModel):
+    """Cuerpo de POST /sessions."""
+    user_profile: UserProfile
