@@ -56,8 +56,12 @@ data/embeddings
 
 # Environment
 .env
+configs/.env
 venv
 .venv
+
+# Temp uploads
+temp/
 
 #Jupyter Notebooks
 *.ipynb_checkpoints
