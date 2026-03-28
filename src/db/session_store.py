@@ -10,14 +10,26 @@ import json
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone
 
+_db_available: Optional[bool] = None  # None = no chequeado, True/False = resultado cacheado
+
 
 def _get_conn():
-    """Retorna una conexión psycopg3 o None si DATABASE_URL no está disponible."""
+    """Retorna una conexión psycopg3 o None. Cachea el estado de disponibilidad."""
+    global _db_available
     db_url = os.getenv("DATABASE_URL")
     if not db_url:
         return None
-    import psycopg
-    return psycopg.connect(db_url)
+    if _db_available is False:
+        return None  # ya sabemos que no está disponible, no reintentar
+    try:
+        import psycopg
+        conn = psycopg.connect(db_url, connect_timeout=3)
+        _db_available = True
+        return conn
+    except Exception as e:
+        _db_available = False
+        print(f"WARNING: No se pudo conectar a PostgreSQL ({e}).")
+        return None
 
 
 def init_db():
@@ -38,8 +50,13 @@ def init_db():
                     )
                 """)
         print("INFO: Tabla nutria_sessions lista.")
+    except Exception as e:
+        print(f"WARNING: No se pudo inicializar la base de datos ({e}). Continuando sin persistencia.")
     finally:
-        conn.close()
+        try:
+            conn.close()
+        except Exception:
+            pass
 
 
 def create_session(session_id: str, user_profile: Dict[str, Any]) -> Dict[str, Any]:

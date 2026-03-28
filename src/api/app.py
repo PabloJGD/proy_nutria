@@ -152,6 +152,62 @@ async def recommend_recipe(
             os.remove(image_path)
 
 
+def _get_or_create_profile(idagente: str) -> UserProfile:
+    """Obtiene el perfil de sesión o crea uno genérico."""
+    profile_dict = get_session_profile(idagente)
+    if profile_dict is None:
+        default_profile = UserProfile()
+        create_session(idagente, default_profile.model_dump())
+        return default_profile
+    return UserProfile(**profile_dict)
+
+
+@app.get("/agent")
+async def agent_endpoint_get(idagente: str, msg: str):
+    """Endpoint GET — solo texto, compatible con el frontend Next.js."""
+    from fastapi.responses import PlainTextResponse
+    profile = _get_or_create_profile(idagente)
+    agent_input = AgentInput(text_description=msg, user_profile=profile)
+    try:
+        result = process_request(idagente, agent_input)
+        return PlainTextResponse(result)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/agent")
+async def agent_endpoint_post(
+    idagente: str = Form(...),
+    msg: str = Form(...),
+    image: UploadFile = File(None),
+):
+    """Endpoint POST — texto + imagen opcional, compatible con el frontend Next.js."""
+    from fastapi.responses import PlainTextResponse
+    profile = _get_or_create_profile(idagente)
+
+    image_path = None
+    if image:
+        os.makedirs("temp", exist_ok=True)
+        image_path = f"temp/{uuid.uuid4()}_{image.filename}"
+        with open(image_path, "wb") as buffer:
+            shutil.copyfileobj(image.file, buffer)
+
+    agent_input = AgentInput(
+        text_description=msg,
+        image_data=image_path,
+        user_profile=profile,
+    )
+
+    try:
+        result = process_request(idagente, agent_input)
+        return PlainTextResponse(result)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        if image_path and os.path.exists(image_path):
+            os.remove(image_path)
+
+
 @app.get("/")
 def home():
     return {"message": "NutrIA API is running."}

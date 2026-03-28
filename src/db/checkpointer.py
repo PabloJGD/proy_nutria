@@ -17,7 +17,8 @@ def get_checkpointer():
             from psycopg_pool import ConnectionPool
             from langgraph.checkpoint.postgres import PostgresSaver
 
-            pool = ConnectionPool(conninfo=db_url, max_size=10, kwargs={"autocommit": True, "prepare_threshold": 0})
+            pool = ConnectionPool(conninfo=db_url, max_size=10, open=False, kwargs={"autocommit": True, "prepare_threshold": 0})
+            pool.open(wait=True, timeout=5)
             checkpointer = PostgresSaver(pool)
             checkpointer.setup()  # crea tablas necesarias (idempotente)
             print("INFO: Checkpointer PostgresSaver conectado correctamente.")
