@@ -46,10 +46,6 @@ def get_vector_store():
             embedding=embeddings,
             es_url=es_url,
             es_api_key=es_api_key,
-            strategy=ElasticsearchStore.ApproxRetrievalStrategy(
-                hybrid=True,
-                rrf=True,
-            ),
         )
 
         logger.info(f"ElasticsearchStore conectado — índice: '{index_name}'.")

@@ -78,7 +78,7 @@ def analyze_image_for_ingredients(image_source: str) -> str:
     # Inicializar el modelo Gemini 1.5 Flash (optimizado para velocidad)
     # Usamos la API key de Google AI Studio almacenada en .env
     llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
+        model="gemini-2.0-flash-lite",
         google_api_key=os.getenv("GOOGLE_STUDIO_AI_API_KEY")
     )
     
