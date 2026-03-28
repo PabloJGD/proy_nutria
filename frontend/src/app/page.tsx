@@ -3,6 +3,7 @@
 
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useState, FormEvent, useRef, useEffect, ChangeEvent } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 type Mensaje = { de: 'usuario' | 'bot'; texto: string; imagen?: string };
 
@@ -252,7 +253,22 @@ export default function Page() {
                 {m.imagen && (
                   <img src={m.imagen} alt="ingredientes" className="rounded-lg mb-2 max-h-40 w-full object-cover" />
                 )}
-                {m.texto}
+                {m.de === 'bot' ? (
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
+                      ul: ({ children }) => <ul className="list-disc list-inside my-1 space-y-0.5">{children}</ul>,
+                      ol: ({ children }) => <ol className="list-decimal list-inside my-1 space-y-0.5">{children}</ol>,
+                      li: ({ children }) => <li className="ml-2">{children}</li>,
+                      strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                      hr: () => <hr className="my-2 border-gray-300 dark:border-slate-600" />,
+                    }}
+                  >
+                    {m.texto}
+                  </ReactMarkdown>
+                ) : (
+                  m.texto
+                )}
               </div>
             </div>
           ))}
