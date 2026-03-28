@@ -6,6 +6,7 @@ import { useState, FormEvent, useRef, useEffect, ChangeEvent } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 type Mensaje = { de: 'usuario' | 'bot'; texto: string; imagen?: string };
+type Sesion = { id: string; titulo: string; mensajes: Mensaje[]; fecha: string };
 
 const SUGERENCIAS = [
   'Tengo pollo y arroz, ¿qué preparo?',
@@ -17,6 +18,8 @@ const SUGERENCIAS = [
 export default function Page() {
   const { data: session } = useSession();
   const [chat, setChat] = useState<Mensaje[]>([]);
+  const [sesiones, setSesiones] = useState<Sesion[]>([]);
+  const [sesionId, setSesionId] = useState<string>('');
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
@@ -28,22 +31,63 @@ export default function Page() {
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('nutria-theme');
-    if (saved === 'dark') {
+    const savedTheme = localStorage.getItem('nutria-theme');
+    if (savedTheme === 'dark') {
       setDarkMode(true);
       document.documentElement.classList.add('dark');
     }
+    const savedSessions = localStorage.getItem('nutria-sessions');
+    if (savedSessions) setSesiones(JSON.parse(savedSessions));
+    setSesionId(Date.now().toString());
   }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chat, loading]);
 
+  // Guardar sesión en localStorage cuando cambia el chat
+  useEffect(() => {
+    if (chat.length === 0 || !sesionId) return;
+    const titulo = chat.find((m) => m.de === 'usuario')?.texto.slice(0, 45) ?? 'Nueva conversación';
+    const fecha = new Date().toLocaleDateString('es-PE', { day: '2-digit', month: 'short' });
+    setSesiones((prev) => {
+      const exists = prev.find((s) => s.id === sesionId);
+      const updated = exists
+        ? prev.map((s) => (s.id === sesionId ? { ...s, mensajes: chat } : s))
+        : [{ id: sesionId, titulo, mensajes: chat, fecha }, ...prev];
+      const slice = updated.slice(0, 20);
+      localStorage.setItem('nutria-sessions', JSON.stringify(slice));
+      return slice;
+    });
+  }, [chat, sesionId]);
+
   const toggleDark = () => {
     const next = !darkMode;
     setDarkMode(next);
     document.documentElement.classList.toggle('dark', next);
     localStorage.setItem('nutria-theme', next ? 'dark' : 'light');
+  };
+
+  const nuevaSesion = () => {
+    setChat([]);
+    setSesionId(Date.now().toString());
+    setSidebarOpen(false);
+  };
+
+  const cargarSesion = (s: Sesion) => {
+    setChat(s.mensajes);
+    setSesionId(s.id);
+    setSidebarOpen(false);
+  };
+
+  const eliminarSesion = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSesiones((prev) => {
+      const updated = prev.filter((s) => s.id !== id);
+      localStorage.setItem('nutria-sessions', JSON.stringify(updated));
+      return updated;
+    });
+    if (sesionId === id) nuevaSesion();
   };
 
   const handleImagenChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -72,17 +116,20 @@ export default function Page() {
     limpiarImagen();
     setLoading(true);
     try {
-      const userEmail = session?.user?.email ?? '';
+      const threadId = sesionId;
+      const nombre = session?.user?.name?.split(' ')[0] ?? 'Usuario';
       let respuestaTexto = '';
       if (archivoImagen) {
         const formData = new FormData();
-        formData.append('idagente', userEmail);
+        formData.append('idagente', threadId);
         formData.append('msg', mensajeUsuario);
+        formData.append('nombre', nombre);
         formData.append('image', archivoImagen);
         const res = await fetch('/api/agent', { method: 'POST', body: formData });
         respuestaTexto = await res.text();
       } else {
-        const res = await fetch(`/api/agent?idagente=${encodeURIComponent(userEmail)}&msg=${encodeURIComponent(mensajeUsuario)}`);
+        const params = new URLSearchParams({ idagente: threadId, msg: mensajeUsuario, nombre });
+        const res = await fetch(`/api/agent?${params.toString()}`);
         respuestaTexto = await res.text();
       }
       setChat((c) => [...c, { de: 'bot', texto: respuestaTexto }]);
@@ -97,10 +144,7 @@ export default function Page() {
   if (!session) {
     return (
       <div className="h-full flex flex-col items-center justify-center gap-6 bg-gray-50 dark:bg-slate-900 px-4">
-        <button
-          onClick={toggleDark}
-          className="absolute top-4 right-4 p-2 rounded-lg bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:opacity-80 transition-all"
-        >
+        <button onClick={toggleDark} className="absolute top-4 right-4 p-2 rounded-lg bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:opacity-80 transition-all">
           {darkMode ? '☀️' : '🌙'}
         </button>
         <div className="text-center">
@@ -135,45 +179,79 @@ export default function Page() {
 
       {/* Overlay mobile */}
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-20 md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="fixed inset-0 bg-black/50 z-20 md:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
       {/* Sidebar */}
       <aside className={`
         fixed md:static inset-y-0 left-0 z-30
         w-64 bg-gradient-to-b from-green-800 to-green-900 dark:from-green-900 dark:to-slate-900
-        text-white flex flex-col p-6 shadow-xl
+        text-white flex flex-col shadow-xl
         transform transition-transform duration-300 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
-        <div className="flex justify-between items-start mb-8">
+        {/* Header sidebar */}
+        <div className="flex justify-between items-start p-6 pb-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">🥗 NutrIA</h1>
             <p className="text-green-300 text-xs mt-1">Asistente de Nutrición con IA</p>
           </div>
+          <button onClick={() => setSidebarOpen(false)} className="md:hidden text-green-300 hover:text-white text-xl leading-none">✕</button>
+        </div>
+
+        {/* Nueva sesión */}
+        <div className="px-4 pb-3">
           <button
-            onClick={() => setSidebarOpen(false)}
-            className="md:hidden text-green-300 hover:text-white text-xl leading-none"
+            onClick={nuevaSesion}
+            className="w-full flex items-center gap-2 bg-green-700 hover:bg-green-600 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-all"
           >
-            ✕
+            <span className="text-base font-bold">＋</span> Nueva conversación
           </button>
         </div>
 
-        <div className="flex-1">
-          <p className="text-green-400 text-xs uppercase font-semibold mb-3 tracking-wider">¿Qué puedo hacer?</p>
-          <ul className="space-y-3 text-sm text-green-100">
-            <li className="flex items-start gap-2"><span>🍽️</span><span>Recomendar recetas según tus ingredientes</span></li>
-            <li className="flex items-start gap-2"><span>🇵🇪</span><span>Buscar platos de cocina peruana</span></li>
-            <li className="flex items-start gap-2"><span>📊</span><span>Brindar información nutricional detallada</span></li>
-            <li className="flex items-start gap-2"><span>📷</span><span>Analizar fotos de ingredientes</span></li>
-            <li className="flex items-start gap-2"><span>🥗</span><span>Adaptar recetas a tus restricciones</span></li>
-          </ul>
+        {/* Lista de sesiones */}
+        <div className="flex-1 overflow-y-auto px-4">
+          {sesiones.length > 0 ? (
+            <>
+              <p className="text-green-400 text-xs uppercase font-semibold mb-2 tracking-wider">Conversaciones</p>
+              <ul className="space-y-1">
+                {sesiones.map((s) => (
+                  <li key={s.id}>
+                    <button
+                      onClick={() => cargarSesion(s)}
+                      className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-all group flex items-start justify-between gap-2 ${
+                        sesionId === s.id
+                          ? 'bg-green-600 text-white'
+                          : 'text-green-100 hover:bg-green-700/50'
+                      }`}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="truncate font-medium leading-tight">{s.titulo}</p>
+                        <p className={`text-xs mt-0.5 ${sesionId === s.id ? 'text-green-200' : 'text-green-400'}`}>{s.fecha}</p>
+                      </div>
+                      <span
+                        onClick={(e) => eliminarSesion(s.id, e)}
+                        className="opacity-0 group-hover:opacity-100 text-green-300 hover:text-red-400 transition-all flex-shrink-0 mt-0.5 text-lg leading-none"
+                      >×</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <div className="mt-2">
+              <p className="text-green-400 text-xs uppercase font-semibold mb-3 tracking-wider">¿Qué puedo hacer?</p>
+              <ul className="space-y-3 text-sm text-green-100">
+                <li className="flex items-start gap-2"><span>🍽️</span><span>Recomendar recetas según tus ingredientes</span></li>
+                <li className="flex items-start gap-2"><span>🇵🇪</span><span>Buscar platos de cocina peruana</span></li>
+                <li className="flex items-start gap-2"><span>📊</span><span>Brindar información nutricional detallada</span></li>
+                <li className="flex items-start gap-2"><span>📷</span><span>Analizar fotos de ingredientes</span></li>
+              </ul>
+            </div>
+          )}
         </div>
 
-        <div className="mt-auto">
+        <div className="p-4 border-t border-green-700/50">
           <p className="text-green-500 text-xs text-center">Powered by GPT-4o + LangGraph</p>
         </div>
       </aside>
@@ -184,11 +262,7 @@ export default function Page() {
         {/* Header */}
         <header className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 px-4 sm:px-6 py-3 flex justify-between items-center shadow-sm flex-shrink-0">
           <div className="flex items-center gap-3">
-            {/* Hamburger — solo mobile */}
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all"
-            >
+            <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
@@ -199,17 +273,10 @@ export default function Page() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              onClick={toggleDark}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:opacity-80 transition-all"
-              title={darkMode ? 'Modo claro' : 'Modo oscuro'}
-            >
+            <button onClick={toggleDark} className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:opacity-80 transition-all" title={darkMode ? 'Modo claro' : 'Modo oscuro'}>
               {darkMode ? '☀️' : '🌙'}
             </button>
-            <button
-              onClick={() => signOut()}
-              className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hover:text-red-500 border border-gray-200 dark:border-slate-600 hover:border-red-300 px-2 sm:px-3 py-1.5 rounded-lg transition-all"
-            >
+            <button onClick={() => signOut()} className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hover:text-red-500 border border-gray-200 dark:border-slate-600 hover:border-red-300 px-2 sm:px-3 py-1.5 rounded-lg transition-all">
               Salir
             </button>
           </div>
@@ -220,6 +287,7 @@ export default function Page() {
           {chat.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full text-center gap-3 px-4">
               <div className="text-5xl">🍽️</div>
+              <p className="font-semibold text-xl text-gray-700 dark:text-gray-200">¡Hola, {userName}! 👋</p>
               <p className="font-medium text-gray-600 dark:text-gray-300">¿Qué tienes en la despensa hoy?</p>
               <p className="text-sm text-gray-400 dark:text-gray-500 max-w-xs">
                 Cuéntame qué ingredientes tienes, sube una foto o dime qué tipo de comida deseas.
@@ -241,18 +309,14 @@ export default function Page() {
           {chat.map((m, i) => (
             <div key={i} className={`flex ${m.de === 'usuario' ? 'justify-end' : 'justify-start'}`}>
               {m.de === 'bot' && (
-                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center text-sm mr-2 flex-shrink-0 mt-1">
-                  🥗
-                </div>
+                <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center text-sm mr-2 flex-shrink-0 mt-1">🥗</div>
               )}
-              <div className={`max-w-[80%] sm:max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+              <div className={`max-w-[80%] sm:max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                 m.de === 'usuario'
                   ? 'bg-green-600 text-white rounded-tr-sm'
                   : 'bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-slate-700 shadow-sm rounded-tl-sm'
               }`}>
-                {m.imagen && (
-                  <img src={m.imagen} alt="ingredientes" className="rounded-lg mb-2 max-h-40 w-full object-cover" />
-                )}
+                {m.imagen && <img src={m.imagen} alt="ingredientes" className="rounded-lg mb-2 max-h-40 w-full object-cover" />}
                 {m.de === 'bot' ? (
                   <ReactMarkdown
                     components={{
@@ -266,18 +330,14 @@ export default function Page() {
                   >
                     {m.texto}
                   </ReactMarkdown>
-                ) : (
-                  m.texto
-                )}
+                ) : m.texto}
               </div>
             </div>
           ))}
 
           {loading && (
             <div className="flex justify-start">
-              <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center text-sm mr-2 flex-shrink-0">
-                🥗
-              </div>
+              <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center text-sm mr-2 flex-shrink-0">🥗</div>
               <div className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 shadow-sm px-4 py-3 rounded-2xl rounded-tl-sm">
                 <div className="flex gap-1 items-center h-4">
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
@@ -287,7 +347,6 @@ export default function Page() {
               </div>
             </div>
           )}
-
           <div ref={bottomRef} />
         </div>
 
@@ -303,52 +362,26 @@ export default function Page() {
               <button onClick={limpiarImagen} className="text-gray-400 hover:text-red-500 transition-all text-xl leading-none flex-shrink-0">×</button>
             </div>
           )}
-
           <form onSubmit={enviar} className="flex gap-2 items-end">
             <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImagenChange} />
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="p-2.5 sm:p-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/30 hover:border-green-300 hover:text-green-600 transition-all flex-shrink-0"
-              title="Subir imagen"
-            >
-              📎
-            </button>
-
+            <button type="button" onClick={() => fileInputRef.current?.click()} className="p-2.5 sm:p-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/30 hover:border-green-300 hover:text-green-600 transition-all flex-shrink-0" title="Subir imagen">📎</button>
             <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleImagenChange} />
-            <button
-              type="button"
-              onClick={() => cameraInputRef.current?.click()}
-              className="p-2.5 sm:p-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/30 hover:border-green-300 hover:text-green-600 transition-all flex-shrink-0"
-              title="Tomar foto"
-            >
-              📷
-            </button>
-
+            <button type="button" onClick={() => cameraInputRef.current?.click()} className="p-2.5 sm:p-3 rounded-xl border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/30 hover:border-green-300 hover:text-green-600 transition-all flex-shrink-0" title="Tomar foto">📷</button>
             <textarea
               className="flex-1 resize-none rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-3 sm:px-4 py-2.5 sm:py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all min-h-[44px] max-h-28"
               placeholder="Ej: Tengo tomate, cebolla y huevo..."
               value={msg}
               onChange={(e) => setMsg(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  enviar(e as unknown as FormEvent);
-                }
+                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); enviar(e as unknown as FormEvent); }
               }}
               disabled={loading}
               rows={1}
             />
-
-            <button
-              type="submit"
-              disabled={loading || (!msg.trim() && !imagenFile)}
-              className="bg-green-600 hover:bg-green-700 disabled:bg-gray-300 dark:disabled:bg-slate-600 text-white p-2.5 sm:p-3 rounded-xl font-medium text-sm transition-all flex-shrink-0"
-            >
+            <button type="submit" disabled={loading || (!msg.trim() && !imagenFile)} className="bg-green-600 hover:bg-green-700 disabled:bg-gray-300 dark:disabled:bg-slate-600 text-white p-2.5 sm:p-3 rounded-xl font-medium text-sm transition-all flex-shrink-0">
               {loading ? '...' : '➤'}
             </button>
           </form>
-
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center hidden sm:block">
             Enter para enviar · Shift+Enter para nueva línea · 📎 subir imagen · 📷 tomar foto
           </p>

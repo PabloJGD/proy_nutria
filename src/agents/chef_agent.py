@@ -47,10 +47,12 @@ def profile_modifier(state, config: RunnableConfig):
     """
     profile_str = config["configurable"].get("user_profile", "")
     restrictions_str = config["configurable"].get("restrictions", "")
+    user_name = config["configurable"].get("user_name", "Usuario")
     system_msg = SystemMessage(
         content=SYSTEM_TEMPLATE.format(
             user_profile=profile_str,
             restrictions=restrictions_str,
+            user_name=user_name,
         )
     )
     return [system_msg] + state["messages"]
@@ -70,7 +72,7 @@ agent = create_react_agent(
 # FUNCIÓN PRINCIPAL
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def process_request(session_id: str, request: AgentInput) -> str:
+def process_request(session_id: str, request: AgentInput, user_name: str = "Usuario") -> str:
     """
     Punto de entrada principal para procesar peticiones al agente.
 
@@ -101,6 +103,7 @@ def process_request(session_id: str, request: AgentInput) -> str:
                 "thread_id": session_id,
                 "user_profile": profile_str,
                 "restrictions": restrictions_str,
+                "user_name": user_name,
             }
         },
     )

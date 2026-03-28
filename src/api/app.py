@@ -163,13 +163,13 @@ def _get_or_create_profile(idagente: str) -> UserProfile:
 
 
 @app.get("/agent")
-async def agent_endpoint_get(idagente: str, msg: str):
+async def agent_endpoint_get(idagente: str, msg: str, nombre: str = "Usuario"):
     """Endpoint GET — solo texto, compatible con el frontend Next.js."""
     from fastapi.responses import PlainTextResponse
     profile = _get_or_create_profile(idagente)
     agent_input = AgentInput(text_description=msg, user_profile=profile)
     try:
-        result = process_request(idagente, agent_input)
+        result = process_request(idagente, agent_input, user_name=nombre)
         return PlainTextResponse(result)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -179,6 +179,7 @@ async def agent_endpoint_get(idagente: str, msg: str):
 async def agent_endpoint_post(
     idagente: str = Form(...),
     msg: str = Form(...),
+    nombre: str = Form("Usuario"),
     image: UploadFile = File(None),
 ):
     """Endpoint POST — texto + imagen opcional, compatible con el frontend Next.js."""
@@ -199,7 +200,7 @@ async def agent_endpoint_post(
     )
 
     try:
-        result = process_request(idagente, agent_input)
+        result = process_request(idagente, agent_input, user_name=nombre)
         return PlainTextResponse(result)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
