@@ -10,10 +10,10 @@
                 <mxCell id="header-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#0f3460;strokeWidth=2;" parent="1" vertex="1">
                     <mxGeometry x="40" y="20" width="1520" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="title" value="🍳 AI CHEF AGENT - SYSTEM ARCHITECTURE" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28;fontStyle=1;fontColor=#e94560;" parent="1" vertex="1">
+                <mxCell id="title" value="🥗 NutrIA - SYSTEM ARCHITECTURE" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28;fontStyle=1;fontColor=#e94560;" parent="1" vertex="1">
                     <mxGeometry x="400" y="35" width="800" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="subtitle" value="LangChain-based Intelligent Recipe Recommendation System" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontColor=#94a3b8;" parent="1" vertex="1">
+                <mxCell id="subtitle" value="LangGraph Conversational Nutrition AI | Cloud Run + Vercel" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontColor=#94a3b8;" parent="1" vertex="1">
                     <mxGeometry x="500" y="70" width="600" height="25" as="geometry"/>
                 </mxCell>
                 <mxCell id="ui-container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f3460;strokeColor=#e94560;strokeWidth=3;opacity=80;" parent="1" vertex="1">
@@ -25,10 +25,10 @@
                 <mxCell id="streamlit-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#533483;strokeWidth=2;" parent="1" vertex="1">
                     <mxGeometry x="55" y="170" width="250" height="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="streamlit-title" value="STREAMLIT WEB APP" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
+                <mxCell id="streamlit-title" value="NEXT.JS WEB APP" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
                     <mxGeometry x="55" y="175" width="250" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="streamlit-file" value="📄 src/frontend/app.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
+                <mxCell id="streamlit-file" value="📄 frontend/src/app/page.tsx" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
                     <mxGeometry x="55" y="195" width="250" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="st-features" value="• Real-time Camera Capture&#10;• Image Upload (JPG/PNG)&#10;• Responsive Web Design" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=10;fontColor=#94a3b8;spacingLeft=10;" parent="1" vertex="1">
@@ -259,7 +259,7 @@
                 <mxCell id="gemini-title" value="GOOGLE GEMINI" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#3b82f6;" parent="1" vertex="1">
                     <mxGeometry x="1315" y="195" width="200" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="gemini-model" value="gemini-1.5-flash (Vision AI)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#60a5fa;" parent="1" vertex="1">
+                <mxCell id="gemini-model" value="gemini-2.0-flash-lite (Vision AI)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#60a5fa;" parent="1" vertex="1">
                     <mxGeometry x="1315" y="215" width="200" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="gemini-features" value="✓ Multimodal Image Understanding&#10;✓ Food &amp; Ingredient Recognition&#10;✓ Fast Response (Flash model)&#10;✓ High Accuracy Object Detection" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontColor=#94a3b8;spacingLeft=10;" parent="1" vertex="1">
@@ -357,7 +357,7 @@
                 <mxCell id="footer-flow" value="📱 User Input  →  🔌 FastAPI  →  🤖 Agent Reasoning  →  🔧 Tool Execution  →  ☁️ External APIs  →  📊 Response" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontColor=#94a3b8;" parent="1" vertex="1">
                     <mxGeometry x="200" y="790" width="1200" height="25" as="geometry"/>
                 </mxCell>
-                <mxCell id="footer-tech" value="Stack: Python 3.10 | LangChain 0.2.x | FastAPI | Streamlit | Pydantic | Google Gemini | Spoonacular API" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#64748b;" parent="1" vertex="1">
+                <mxCell id="footer-tech" value="Stack: Python 3.12 | LangGraph | LangChain | FastAPI | Next.js 16 | Pydantic v2 | GPT-4o | Gemini 2.0 Flash Lite | Spoonacular API | Elasticsearch | Cloud Run | Vercel" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#64748b;" parent="1" vertex="1">
                     <mxGeometry x="200" y="815" width="1200" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#9933FF;strokeWidth=2;" vertex="1" parent="1">
@@ -413,14 +413,14 @@
                     <mxGeometry x="30" y="112" width="220" height="24" as="geometry"/>
                 </mxCell>
 
-                <!-- Streamlit chat box -->
+                <!-- Next.js chat box -->
                 <mxCell id="v2-chat-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#00d9ff;strokeWidth=2;" parent="1" vertex="1">
                     <mxGeometry x="34" y="148" width="212" height="155" as="geometry"/>
                 </mxCell>
                 <mxCell id="v2-chat-title" value="STREAMLIT CHAT" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#00d9ff;" parent="1" vertex="1">
                     <mxGeometry x="34" y="153" width="212" height="18" as="geometry"/>
                 </mxCell>
-                <mxCell id="v2-chat-file" value="📄 src/frontend/app.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#94a3b8;" parent="1" vertex="1">
+                <mxCell id="v2-chat-file" value="📄 frontend/src/app/page.tsx" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#94a3b8;" parent="1" vertex="1">
                     <mxGeometry x="34" y="171" width="212" height="15" as="geometry"/>
                 </mxCell>
                 <mxCell id="v2-chat-feat" value="• st.chat_message() / st.chat_input()&#10;• Historial local en session_state&#10;• Adjuntar imagen (opcional)&#10;• Muestra respuesta del agente&#10;  en tiempo real" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
@@ -892,7 +892,7 @@
                 <mxCell id="v2-gem-title" value="GOOGLE GEMINI" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#3b82f6;" parent="1" vertex="1">
                     <mxGeometry x="1328" y="304" width="190" height="22" as="geometry"/>
                 </mxCell>
-                <mxCell id="v2-gem-model" value="gemini-1.5-flash (Vision AI)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#60a5fa;" parent="1" vertex="1">
+                <mxCell id="v2-gem-model" value="gemini-2.0-flash-lite (Vision AI)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#60a5fa;" parent="1" vertex="1">
                     <mxGeometry x="1328" y="326" width="190" height="18" as="geometry"/>
                 </mxCell>
                 <mxCell id="v2-gem-feat" value="✓ Comprensión multimodal de imágenes&#10;✓ Detección de alimentos e ingredientes&#10;✓ Modelo Flash — alta velocidad&#10;✓ Free Tier disponible" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
@@ -1001,10 +1001,10 @@
                 <mxCell id="v2-footer" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#0f3460;strokeWidth=1;" parent="1" vertex="1">
                     <mxGeometry x="20" y="878" width="1760" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="v2-footer-flow" value="👤 Usuario  →  📱 Streamlit Chat  →  🔌 FastAPI /sessions/{id}/chat  →  🤖 LangGraph ReAct  →  💾 Checkpointer  →  🔧 Tools  →  ☁️ APIs  →  📝 Respuesta (ES)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontColor=#94a3b8;" parent="1" vertex="1">
+                <mxCell id="v2-footer-flow" value="👤 Usuario  →  💻 Next.js Web App  →  🔌 FastAPI GET|POST /agent  →  🤖 LangGraph ReAct  →  💾 Checkpointer  →  🔧 Tools  →  ☁️ APIs  →  📝 Respuesta (ES)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontColor=#94a3b8;" parent="1" vertex="1">
                     <mxGeometry x="100" y="886" width="1600" height="24" as="geometry"/>
                 </mxCell>
-                <mxCell id="v2-footer-stack" value="Python 3.12  ·  LangGraph 0.4.5  ·  LangChain 0.2.x  ·  FastAPI  ·  Streamlit  ·  psycopg 3.2.6  ·  Pydantic v2  ·  GPT-4o  ·  Gemini 1.5 Flash  ·  Spoonacular" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
+                <mxCell id="v2-footer-stack" value="Python 3.12  ·  LangGraph  ·  LangChain  ·  FastAPI  ·  Next.js 16  ·  psycopg 3.2.6  ·  Pydantic v2  ·  GPT-4o  ·  Gemini 2.0 Flash Lite  ·  Spoonacular  ·  Cloud Run  ·  Vercel" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
                     <mxGeometry x="100" y="912" width="1600" height="18" as="geometry"/>
                 </mxCell>
 
@@ -1029,7 +1029,7 @@
                 <mxCell id="v3-title" value="🥗  NutrIA v3 — RAG + ELASTICSEARCH ARCHITECTURE" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=26;fontStyle=1;fontColor=#e94560;" parent="1" vertex="1">
                     <mxGeometry x="200" y="18" width="1500" height="36" as="geometry"/>
                 </mxCell>
-                <mxCell id="v3-sub" value="create_react_agent (LangGraph)  ·  Elasticsearch Hybrid Search (KNN + BM25 + RRF)  ·  text-embedding-3-small  ·  PostgresSaver / MemorySaver  ·  LangSmith" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontColor=#94a3b8;" parent="1" vertex="1">
+                <mxCell id="v3-sub" value="create_react_agent (LangGraph)  ·  Elasticsearch Vectorial Search (text-embedding-3-small)  ·  PostgresSaver / MemorySaver  ·  LangSmith" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontColor=#94a3b8;" parent="1" vertex="1">
                     <mxGeometry x="200" y="54" width="1500" height="22" as="geometry"/>
                 </mxCell>
 
@@ -1239,7 +1239,7 @@
                 <mxCell id="v3-store-d1" value="ElasticsearchStore → índice nutria-recetas-peruanas" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
                     <mxGeometry x="670" y="556" width="330" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="v3-store-d2" value="Estrategia: ApproxRetrievalStrategy(hybrid=True, rrf=True)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#64748b;spacingLeft=8;" parent="1" vertex="1">
+                <mxCell id="v3-store-d2" value="Estrategia: ElasticsearchStore vectorial (text-embedding-3-small)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#64748b;spacingLeft=8;" parent="1" vertex="1">
                     <mxGeometry x="670" y="576" width="330" height="26" as="geometry"/>
                 </mxCell>
 
@@ -1298,7 +1298,7 @@
                 <mxCell id="v3-es-bm25" value="📝 BM25 full-text ([Nombre][Ingredientes][Instrucciones])" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
                     <mxGeometry x="1085" y="342" width="310" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="v3-es-rrf" value="🎯 RRF (Reciprocal Rank Fusion) — fusión final" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
+                <mxCell id="v3-es-rrf" value="🎯 Similitud vectorial coseno — ranking final" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;spacingLeft=8;" parent="1" vertex="1">
                     <mxGeometry x="1085" y="364" width="310" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="v3-es-conn" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#64748b;strokeWidth=1;" parent="1" vertex="1">
@@ -1318,7 +1318,7 @@
                 <mxCell id="v3-gemini" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16213e;strokeColor=#4285f4;strokeWidth=2;" parent="1" vertex="1">
                     <mxGeometry x="1085" y="606" width="310" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="v3-gem-lbl" value="🔵 Google Gemini 1.5 Flash" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#4285f4;" parent="1" vertex="1">
+                <mxCell id="v3-gem-lbl" value="🔵 Google Gemini 2.0 Flash Lite" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#4285f4;" parent="1" vertex="1">
                     <mxGeometry x="1085" y="614" width="310" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="v3-gem-sub" value="analyze_image_for_ingredients · Free Tier" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
@@ -1448,11 +1448,175 @@
                 <mxCell id="v3-footer-title" value="NutrIA v3 — Tu Chef y Nutricionista Personal con IA" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#e94560;" parent="1" vertex="1">
                     <mxGeometry x="100" y="858" width="1700" height="24" as="geometry"/>
                 </mxCell>
-                <mxCell id="v3-footer-stack" value="Python 3.12  ·  LangGraph  ·  LangChain  ·  FastAPI  ·  Streamlit  ·  Elasticsearch 8.x (GCP)  ·  psycopg 3  ·  text-embedding-3-small  ·  GPT-4o  ·  Gemini 1.5 Flash  ·  Spoonacular" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
+                <mxCell id="v3-footer-stack" value="Python 3.12  ·  LangGraph  ·  LangChain  ·  FastAPI  ·  Next.js 16 (Vercel)  ·  Elasticsearch 8.x (GCP)  ·  psycopg 3  ·  text-embedding-3-small  ·  GPT-4o  ·  Gemini 2.0 Flash Lite  ·  Spoonacular  ·  Cloud Run" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
                     <mxGeometry x="100" y="882" width="1700" height="18" as="geometry"/>
                 </mxCell>
 
             </root>
         </mxGraphModel>
     </diagram>
+
+    <diagram name="NutrIA v4 - Arquitectura Final" id="v4-final">
+        <mxGraphModel dx="1400" dy="900" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+
+                <!-- FONDO -->
+                <mxCell id="v4-bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0d1117;strokeColor=none;" parent="1" vertex="1" zOrder="-1">
+                    <mxGeometry x="0" y="0" width="1654" height="900" as="geometry"/>
+                </mxCell>
+
+                <!-- TÍTULO -->
+                <mxCell id="v4-title" value="NutrIA — Arquitectura del Sistema" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#f8fafc;" parent="1" vertex="1">
+                    <mxGeometry x="0" y="20" width="1654" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-sub" value="Flujo de izquierda a derecha · LangGraph ReAct · RAG Vectorial · Cloud Run · Vercel" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="0" y="56" width="1654" height="20" as="geometry"/>
+                </mxCell>
+
+                <!-- ═══════════════════════════════════════════ -->
+                <!-- FILA 1: FLUJO PRINCIPAL (izquierda → derecha) -->
+                <!-- ═══════════════════════════════════════════ -->
+
+                <!-- 1. USUARIO -->
+                <mxCell id="v4-user" value="👤&#xa;Usuario" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#94a3b8;strokeWidth=2;fontSize=14;fontColor=#f8fafc;fontStyle=1;verticalAlign=middle;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="280" width="120" height="100" as="geometry"/>
+                </mxCell>
+
+                <!-- 2. FRONTEND -->
+                <mxCell id="v4-fe-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f172a;strokeColor=#6366f1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="250" width="220" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-fe-lbl" value="FRONTEND" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#6366f1;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="258" width="220" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-fe-body" value="Next.js 16 + TailwindCSS&#xa;NextAuth (Google OAuth)&#xa;Chat · Imagen · Dark Mode" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#e2e8f0;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="280" width="220" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-fe-badge" value="☁️ Vercel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e1e2e;strokeColor=#6366f1;fontSize=11;fontColor=#a5b4fc;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="270" y="358" width="140" height="28" as="geometry"/>
+                </mxCell>
+
+                <!-- 3. BACKEND / FastAPI -->
+                <mxCell id="v4-be-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f172a;strokeColor=#22d3ee;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="220" width="220" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-be-lbl" value="BACKEND" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#22d3ee;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="228" width="220" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-be-body" value="FastAPI&#xa;GET /agent  ·  POST /agent&#xa;/sessions  ·  /history" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#e2e8f0;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="250" width="220" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-pg-inline" value="🐘 PostgreSQL (GCP VM)&#xa;Memoria · PostgresSaver" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e1e2e;strokeColor=#a78bfa;fontSize=10;fontColor=#c4b5fd;" parent="1" vertex="1">
+                    <mxGeometry x="550" y="320" width="180" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-be-badge" value="☁️ Google Cloud Run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e1e2e;strokeColor=#22d3ee;fontSize=11;fontColor=#67e8f9;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="570" y="376" width="180" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-langsmith-inline" value="🔭 LangSmith · Observabilidad" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="530" y="408" width="220" height="22" as="geometry"/>
+                </mxCell>
+
+                <!-- 4. LANGGRAPH AGENT -->
+                <mxCell id="v4-agent-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f172a;strokeColor=#f59e0b;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="180" width="260" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-agent-lbl" value="🤖 LANGGRAPH REACT AGENT" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#f59e0b;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="190" width="260" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-agent-llm" value="GPT-4o (OpenAI)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#fcd34d;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="212" width="260" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-t1" value="👁️ Visión&#xa;Gemini 2.0 Flash Lite" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#4ade80;fontSize=10;fontColor=#e2e8f0;" parent="1" vertex="1">
+                    <mxGeometry x="858" y="240" width="100" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-t2" value="🔤 Traductor&#xa;GPT-4o-mini" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#4ade80;fontSize=10;fontColor=#e2e8f0;" parent="1" vertex="1">
+                    <mxGeometry x="982" y="240" width="100" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-t3" value="🗂️ RAG&#xa;Recetas Peruanas" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#fb923c;fontSize=10;fontColor=#e2e8f0;" parent="1" vertex="1">
+                    <mxGeometry x="858" y="304" width="100" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-t4" value="🍎 Spoonacular&#xa;Recetas + Nutrición" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#4ade80;fontSize=10;fontColor=#e2e8f0;" parent="1" vertex="1">
+                    <mxGeometry x="982" y="304" width="100" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-agent-check" value="💾 Checkpointer (PostgresSaver / MemorySaver)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#94a3b8;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="362" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-agent-resp" value="📝 Respuesta en Español" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#4ade80;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="390" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-agent-loop" value="↺ ReAct loop: razona → actúa → observa" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#f59e0b;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="412" width="260" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-agent-ls" value="🔭 LangSmith tracing" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="432" width="260" height="18" as="geometry"/>
+                </mxCell>
+
+                <!-- ═══════════════════════════════════════════ -->
+                <!-- FILA 2: PIPELINE RAG (abajo) -->
+                <!-- ═══════════════════════════════════════════ -->
+
+                <!-- Sección RAG label -->
+                <mxCell id="v4-rag-section" value="PIPELINE RAG — Recetas Peruanas" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#fb923c;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="570" width="400" height="22" as="geometry"/>
+                </mxCell>
+
+                <!-- RAG Step 1: Query del usuario -->
+                <mxCell id="v4-rag1" value="1️⃣ Query&#xa;del usuario" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#fb923c;strokeWidth=1.5;fontSize=11;fontColor=#e2e8f0;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="610" width="130" height="60" as="geometry"/>
+                </mxCell>
+                <!-- RAG Step 2: Embed -->
+                <mxCell id="v4-rag2" value="2️⃣ Embed&#xa;text-embedding-3-small" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#fb923c;strokeWidth=1.5;fontSize=11;fontColor=#e2e8f0;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="610" width="160" height="60" as="geometry"/>
+                </mxCell>
+                <!-- RAG Step 3: Elasticsearch -->
+                <mxCell id="v4-rag3" value="3️⃣ Elasticsearch&#xa;Búsqueda vectorial&#xa;24 recetas peruanas · GCP VM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#fb923c;strokeWidth=2;fontSize=11;fontColor=#e2e8f0;" parent="1" vertex="1">
+                    <mxGeometry x="650" y="600" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <!-- RAG Step 4: Top-K docs -->
+                <mxCell id="v4-rag4" value="4️⃣ Top-K recetas&#xa;contexto al agente" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#fb923c;strokeWidth=1.5;fontSize=11;fontColor=#e2e8f0;" parent="1" vertex="1">
+                    <mxGeometry x="920" y="610" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <!-- RAG ingestion note -->
+                <mxCell id="v4-rag-ingest" value="⬆ Ingesta (offline): JSON → Split → Embed → Index" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#64748b;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="580" y="690" width="340" height="18" as="geometry"/>
+                </mxCell>
+
+                <!-- RAG arrows -->
+                <mxCell id="v4-rarr1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#fb923c;strokeWidth=2;" parent="1" source="v4-rag1" target="v4-rag2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-rarr2" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#fb923c;strokeWidth=2;" parent="1" source="v4-rag2" target="v4-rag3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-rarr3" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#fb923c;strokeWidth=2;" parent="1" source="v4-rag3" target="v4-rag4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <!-- RAG tool → RAG step 1 -->
+                <mxCell id="v4-rarr0" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#fb923c;strokeWidth=1.5;dashed=1;exitX=0.5;exitY=1;exitDX=0;exitDY=0;entryX=0.5;entryY=0;entryDX=0;entryDY=0;" parent="1" source="v4-t3" target="v4-rag1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <!-- RAG step 4 → Agent -->
+                <mxCell id="v4-rarr4" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#fb923c;strokeWidth=1.5;dashed=1;exitX=0.5;exitY=0;exitDX=0;exitDY=0;entryX=0.5;entryY=1;entryDX=0;entryDY=0;" parent="1" source="v4-rag4" target="v4-agent-box" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- ═══════════════════════════════════════════ -->
+                <!-- FLECHAS PRINCIPALES (flujo horizontal) -->
+                <!-- ═══════════════════════════════════════════ -->
+                <mxCell id="v4-arr-u-fe" value="texto / imagen" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#94a3b8;strokeWidth=2;fontSize=11;fontColor=#94a3b8;" parent="1" source="v4-user" target="v4-fe-box" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-arr-fe-be" value="GET/POST /agent" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#22d3ee;strokeWidth=2;fontSize=11;fontColor=#22d3ee;" parent="1" source="v4-fe-box" target="v4-be-box" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="v4-arr-be-ag" value="invoca agente" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#f59e0b;strokeWidth=2;fontSize=11;fontColor=#f59e0b;" parent="1" source="v4-be-box" target="v4-agent-box" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+            </root>
+        </mxGraphModel>
+    </diagram>
+
 </mxfile>

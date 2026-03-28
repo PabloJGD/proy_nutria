@@ -1,63 +1,99 @@
-# 🥗 NutrIA: Agente de Nutrición Inteligente
+# 🥗 NutrIA: Agente de Nutrición Inteligente con IA
 
-## 📝 Resumen Ejecutivo
+> Asistente conversacional de nutrición impulsado por IA Agéntica + RAG, deployado en producción sobre Google Cloud Run y Vercel.
 
-**NutrIA** es un asistente conversacional de nutrición impulsado por **IA Agéntica**. Desarrollado con **LangGraph**, mantiene memoria por sesión (PostgresSaver / MemorySaver), identifica ingredientes mediante visión artificial (Google Gemini), busca recetas peruanas en una base de conocimiento vectorial (Elasticsearch) y conecta con APIs externas para generar recetas personalizadas con información nutricional completa. Las conversaciones son multi-turno: el agente recuerda el contexto de cada sesión.
+**Demo en vivo:** [https://nutria-frontend.vercel.app](https://nutria-frontend.vercel.app)
+**API Backend:** [https://nutria-backend-722466450755.us-central1.run.app](https://nutria-backend-722466450755.us-central1.run.app)
+
+---
+
+## 📌 Descripción del Proyecto
+
+**NutrIA** es un asistente conversacional de nutrición que:
+- Acepta **texto o imagen** de ingredientes y recomienda recetas personalizadas
+- Tiene **memoria conversacional** por sesión (LangGraph + PostgreSQL)
+- Busca **recetas peruanas** en una base de conocimiento vectorial (RAG con Elasticsearch)
+- Analiza **fotos de ingredientes** con visión artificial (Google Gemini)
+- Responde siempre en **español** con información nutricional completa
+- Tiene **frontend web responsive** con login Google, modo oscuro y soporte de imágenes
 
 ---
 
 ## 🏗️ Arquitectura del Sistema
 
-```mermaid
-graph TD
-    User([👤 Usuario]) -- "Mensaje + imagen opcional" --> API[🔌 FastAPI]
-    API -- "session_id + AgentInput" --> Agent[🤖 LangGraph ReAct Agent]
-
-    subgraph Checkpointer
-        PG[(PostgresSaver\nGCP)]
-        MEM[(MemorySaver\nfallback local)]
-    end
-
-    Agent <--> PG
-    Agent <--> MEM
-
-    subgraph Tools [Herramientas]
-        Translator[🔤 Translator ES→EN]
-        Vision[👁️ Vision Gemini 1.5]
-        RAG[🗂️ RAG Recetas Peruanas]
-        Nutrition[🍎 Spoonacular API]
-    end
-
-    Agent --> Translator
-    Agent --> Vision
-    Agent --> RAG
-    Agent --> Nutrition
-
-    subgraph RAG_Pipeline [RAG Pipeline]
-        ES[(Elasticsearch\nGCP Elastic Cloud)]
-        Corpus[📄 Corpus JSON\n24 recetas peruanas]
-    end
-
-    RAG <--> ES
-    Corpus -- "ingest_recipes.py" --> ES
-
-    Nutrition -- "Recetas + Nutrición" --> Agent
-    Agent -- "Respuesta (ES)" --> API
-    API -- "response" --> User
-
-    subgraph Observability
-        LS[📊 LangSmith]
-    end
-    Agent -.-> LS
+```
+┌─────────────────────────────────────────────────────┐
+│                    FRONTEND                          │
+│         Next.js 16 + TailwindCSS                    │
+│              Vercel (CDN global)                     │
+└──────────────────────┬──────────────────────────────┘
+                       │ GET/POST /agent
+┌──────────────────────▼──────────────────────────────┐
+│                    BACKEND                           │
+│              FastAPI + LangGraph                     │
+│           Google Cloud Run (us-central1)             │
+│                                                      │
+│  ┌─────────────────────────────────────────────┐    │
+│  │         LangGraph ReAct Agent               │    │
+│  │              (GPT-4o)                       │    │
+│  │                                             │    │
+│  │  Tools:                                     │    │
+│  │  ├── 👁️  Vision (Gemini 2.0 Flash Lite)    │    │
+│  │  ├── 🔤  Translator ES→EN (GPT-4o-mini)    │    │
+│  │  ├── 🗂️  RAG Recetas Peruanas (ES)         │    │
+│  │  ├── 🍎  Recipe Search (Spoonacular)        │    │
+│  │  └── 📊  Nutrition Info (Spoonacular)       │    │
+│  └──────────────────┬──────────────────────────┘    │
+│                     │                                │
+│  ┌──────────────────▼──────────────────────────┐    │
+│  │           Checkpointer LangGraph            │    │
+│  │   PostgresSaver (GCP) / MemorySaver (local) │    │
+│  └─────────────────────────────────────────────┘    │
+└──────────────────────┬──────────────────────────────┘
+                       │
+        ┌──────────────┴──────────────┐
+        │                             │
+┌───────▼────────┐         ┌──────────▼────────┐
+│  PostgreSQL    │         │  Elasticsearch    │
+│  GCP VM        │         │  GCP VM           │
+│  (sesiones +   │         │  (24 recetas      │
+│   historial)   │         │   peruanas RAG)   │
+└────────────────┘         └───────────────────┘
+                                     │
+                           ┌─────────▼─────────┐
+                           │   LangSmith        │
+                           │   Observabilidad   │
+                           └───────────────────┘
 ```
 
-### Flujo de trabajo
-1. **Sesión**: El usuario crea una sesión (`POST /sessions`) con su perfil una sola vez.
-2. **Chat multi-turno**: Cada mensaje se envía a `POST /sessions/{id}/chat`; el agente recuerda el contexto.
-3. **Checkpointing**: LangGraph persiste el historial en PostgreSQL (GCP) o en memoria si no hay DB.
-4. **RAG Peruano**: Si el usuario pregunta por recetas peruanas, el agente consulta el índice Elasticsearch (híbrido: KNN semántico + BM25 + RRF) con filtros de región, dieta y alergias.
-5. **Herramientas generales**: el agente traduce ingredientes, analiza imágenes con Gemini y consulta Spoonacular para recetas internacionales.
-6. **Trazabilidad**: cada invocación se registra en LangSmith automáticamente.
+> 📐 Diagrama interactivo completo: [`docs/agent_architecture.drawio`](docs/agent_architecture.drawio) — abrir en [diagrams.net](https://app.diagrams.net) → pestaña **"NutrIA v4"**
+
+### Flujo de una conversación
+1. Usuario se autentica con Google (NextAuth)
+2. Frontend envía mensaje (texto y/o imagen) a `GET|POST /agent`
+3. Cloud Run recibe la request, carga perfil del usuario
+4. LangGraph recupera historial de la sesión (PostgreSQL o MemorySaver)
+5. Agente decide qué herramientas usar según el mensaje
+6. Respuesta en español → guardada en checkpointer → retornada al frontend
+
+---
+
+## 🛠️ Stack Tecnológico
+
+| Capa | Tecnología |
+|------|-----------|
+| **Frontend** | Next.js 16, TypeScript, TailwindCSS, NextAuth |
+| **Backend** | FastAPI, Python 3.12 |
+| **Agente** | LangGraph (`create_react_agent`), LangChain |
+| **LLM Principal** | OpenAI GPT-4o |
+| **Visión** | Google Gemini 2.0 Flash Lite |
+| **Embeddings** | OpenAI text-embedding-3-small |
+| **Vector Store** | Elasticsearch 8.x (GCP VM) |
+| **Memoria** | PostgresSaver (GCP) / MemorySaver (fallback) |
+| **Observabilidad** | LangSmith |
+| **Deploy Backend** | Google Cloud Run |
+| **Deploy Frontend** | Vercel |
+| **Package Manager** | uv (Python) / npm (Node) |
 
 ---
 
@@ -65,48 +101,54 @@ graph TD
 
 ```
 proy_nutria/
-├── main.py                      # Entry point — FastAPI + carga de .env
-├── pyproject.toml               # Dependencias (uv)
+├── Dockerfile                   # Backend → Cloud Run (puerto 8080)
+├── main.py                      # Entry point FastAPI
+├── pyproject.toml               # Dependencias Python (uv)
+├── requirements.txt             # Dependencias para Docker
 │
 ├── configs/
 │   └── .env                     # API keys (no commitear)
 │
+├── frontend/                    # Frontend Next.js → Vercel
+│   ├── Dockerfile
+│   ├── next.config.ts
+│   ├── package.json
+│   └── src/app/
+│       ├── layout.tsx           # Shell + sidebar responsive
+│       ├── page.tsx             # Chat UI + dark mode + imagen
+│       ├── globals.css
+│       ├── AuthProvider.tsx
+│       └── api/
+│           ├── agent/route.ts   # Proxy GET/POST → Cloud Run
+│           └── auth/[...nextauth]/route.ts
+│
 ├── src/
 │   ├── agents/
-│   │   └── chef_agent.py        # 🤖 LangGraph ReAct agent + checkpointer
-│   │
+│   │   └── chef_agent.py        # LangGraph ReAct agent + checkpointer
 │   ├── api/
-│   │   └── app.py               # 🔌 FastAPI: /sessions + /chat + /recommend
-│   │
+│   │   └── app.py               # FastAPI: /sessions + /agent + /recommend
 │   ├── db/
-│   │   ├── checkpointer.py      # PostgresSaver o MemorySaver (fallback)
+│   │   ├── checkpointer.py      # PostgresSaver o MemorySaver
 │   │   └── session_store.py     # CRUD tabla nutria_sessions
-│   │
-│   ├── frontend/
-│   │   └── app.py               # 📱 Streamlit — chat conversacional
-│   │
 │   ├── models/
-│   │   └── schemas.py           # 📦 Pydantic models (UserProfile, ChatResponse…)
-│   │
+│   │   └── schemas.py           # Pydantic models
 │   ├── prompts/
-│   │   └── chef_prompt.py       # 📝 SYSTEM_TEMPLATE (string)
-│   │
+│   │   └── chef_prompt.py       # System prompt template
 │   ├── rag/
-│   │   ├── filters.py           # 🔍 build_es_filters() — ES Query DSL
-│   │   ├── ingestor.py          # 📥 Loaders por fuente (JSON, PDF, Web, HF)
-│   │   ├── recipe_tool.py       # 🗂️ @tool search_peruvian_recipes
-│   │   └── store.py             # 🏪 get_vector_store() — singleton Elasticsearch
-│   │
+│   │   ├── filters.py           # build_es_filters() → ES Query DSL
+│   │   ├── ingestor.py          # Loaders (JSON, PDF, Web, HuggingFace)
+│   │   ├── recipe_tool.py       # @tool search_peruvian_recipes
+│   │   └── store.py             # get_vector_store() singleton
 │   └── tools/
-│       ├── vision.py            # 👁️ analyze_image_for_ingredients (Gemini)
-│       ├── nutrition.py         # 🍎 find_recipes + get_recipe_details (Spoonacular)
-│       └── translator.py        # 🔤 translate_es_to_en (GPT-4o-mini)
+│       ├── vision.py            # analyze_image_for_ingredients (Gemini)
+│       ├── nutrition.py         # find_recipes + get_recipe_details (Spoonacular)
+│       └── translator.py        # translate_es_to_en (GPT-4o-mini)
 │
 ├── scripts/
-│   ├── nutria_cli.py            # 💻 CLI multi-turno
-│   ├── ingest_recipes.py        # 📥 CLI ingesta → Elasticsearch
+│   ├── nutria_cli.py            # CLI multi-turno local
+│   ├── ingest_recipes.py        # Ingesta → Elasticsearch
 │   └── data/
-│       └── recetas_peruanas.json # 24 recetas peruanas (corpus curado)
+│       └── recetas_peruanas.json  # 24 recetas peruanas (corpus curado)
 │
 └── tests/
     └── unit/
@@ -115,49 +157,37 @@ proy_nutria/
 
 ---
 
-## 🔧 Herramientas del Agente
+## ⚙️ Configuración Local
 
-| Tool | Archivo | Función | Backend |
-|------|---------|---------|---------|
-| **Vision** | `src/tools/vision.py` | `analyze_image_for_ingredients()` | Google Gemini 1.5 Flash |
-| **Translator** | `src/tools/translator.py` | `translate_es_to_en()` | OpenAI GPT-4o Mini |
-| **RAG Peruano** | `src/rag/recipe_tool.py` | `search_peruvian_recipes()` | Elasticsearch (GCP) |
-| **Recipe Search** | `src/tools/nutrition.py` | `find_recipes_by_ingredients()` | Spoonacular |
-| **Nutrition Info** | `src/tools/nutrition.py` | `get_recipe_details()` | Spoonacular |
+### 1. Requisitos
+- Python 3.12
+- Node.js 20+
+- [uv](https://github.com/astral-sh/uv) para gestión de paquetes Python
 
----
-
-## ⚙️ Configuración
-
-### 1. Clonar el repositorio
+### 2. Clonar e instalar
 ```bash
 git clone https://github.com/PabloJGD/proy_nutria.git
 cd proy_nutria
-```
-
-### 2. Instalar dependencias con uv
-```bash
 uv sync
 ```
 
 ### 3. Variables de entorno
-Crea/edita `configs/.env`:
-
+Crear `configs/.env`:
 ```env
 # LLMs
 OPENAI_API_KEY=...
-GOOGLE_STUDIO_AI_API_KEY=...
+GOOGLE_STUDIO_AI_API_KEY=...       # Google AI Studio
 
 # Recetas
 SPOONACULAR_API_KEY=...
 
-# PostgreSQL — GCP (opcional; sin esto se usa MemorySaver)
+# PostgreSQL — GCP (opcional; sin esto usa MemorySaver)
 DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/DBNAME
 
-# Elasticsearch — GCP Elastic Cloud (opcional; sin esto RAG deshabilitado)
-ELASTICSEARCH_URL=https://<deployment>.es.us-central1.gcp.cloud.es.io
+# Elasticsearch — GCP (opcional; sin esto RAG deshabilitado)
+ELASTICSEARCH_URL=http://HOST:9200
 ELASTICSEARCH_API_KEY=...
-ES_INDEX_NAME=nutria-recetas-peruanas
+ES_INDEX_NAME=nutria
 
 # LangSmith — Observabilidad (opcional)
 LANGSMITH_ENDPOINT=https://api.smith.langchain.com
@@ -166,61 +196,105 @@ LANGCHAIN_TRACING_V2=true
 LANGCHAIN_PROJECT=nutria
 ```
 
-> Sin `DATABASE_URL` el sistema funciona con `MemorySaver` (memoria solo en proceso).
-> Sin `ELASTICSEARCH_URL` el RAG de recetas peruanas está deshabilitado; el agente usa Spoonacular como fallback.
-
----
-
-## 🗂️ RAG — Base de Conocimiento de Recetas Peruanas
-
-### Ingesta de datos
+### 4. Correr localmente
 ```bash
-# Ver qué se cargará sin indexar
-uv run python scripts/ingest_recipes.py --dry-run
+# Backend (FastAPI)
+uv run uvicorn main:app --reload --port 8000
 
-# Ingestar solo el corpus JSON curado (24 recetas)
+# Frontend (en otra terminal)
+cd frontend
+npm install
+npm run dev
+```
+
+### 5. Ingestar recetas peruanas (requiere Elasticsearch activo)
+```bash
 uv run python scripts/ingest_recipes.py --source json
-
-# Ingestar todas las fuentes disponibles
-uv run python scripts/ingest_recipes.py
 ```
-
-### Fuentes de datos
-| Fuente | Archivo | Contenido |
-|--------|---------|-----------|
-| **JSON curado** | `scripts/data/recetas_peruanas.json` | 24 recetas peruanas (costa, sierra, selva) con metadata completa |
-| **Spoonacular JSON** | `scripts/data/spoonacular_peruvian.json` | Descarga previa de la API Spoonacular (cuisine=peruvian) |
-| **PDFs** | `scripts/data/*.pdf` | Documentos del MINCUL / APEGA |
-| **HuggingFace** | `somosnlp-hackathon-2022/gastronomia-peruana` | Dataset público |
-
-### Pipeline RAG (4 pasos)
-```
-Load (JSONLoader / PyPDFLoader / WebBaseLoader / HuggingFaceDatasetLoader)
-  → Split (1 receta = 1 Document; PDFs con RecursiveCharacterTextSplitter)
-    → Embed (text-embedding-3-small, 1536 dims)
-      → Store (ElasticsearchStore — índice híbrido KNN + BM25 + RRF)
-        → Retrieval (similarity_search con filtros ES Query DSL)
-```
-
-### Filtros disponibles
-El agente puede filtrar por: `region` (costa/sierra/selva), `meal_type`, `dietary_restrictions` (vegetariano, vegano, sin gluten), `allergies` (mariscos, gluten, lácteos), `max_calories`, `max_prep_time`.
 
 ---
 
-## 🚀 Ejecución
+## 🚀 Deploy en Producción
 
-### Opción A — CLI multi-turno
+### Backend → Google Cloud Run
+
 ```bash
-uv run python scripts/nutria_cli.py
+# 1. Autenticarse
+gcloud auth login
+gcloud config set project TU_PROJECT_ID
+
+# 2. Build y push imagen
+gcloud builds submit --tag gcr.io/TU_PROJECT_ID/nutria-backend:latest .
+
+# 3. Deploy
+gcloud run deploy nutria-backend \
+  --image gcr.io/TU_PROJECT_ID/nutria-backend:latest \
+  --platform managed \
+  --region us-central1 \
+  --port 8080 \
+  --allow-unauthenticated \
+  --set-env-vars="OPENAI_API_KEY=...,GOOGLE_STUDIO_AI_API_KEY=...,SPOONACULAR_API_KEY=...,DATABASE_URL=...,ELASTICSEARCH_URL=...,ELASTICSEARCH_API_KEY=...,ES_INDEX_NAME=nutria,LANGCHAIN_API_KEY=...,LANGCHAIN_TRACING_V2=true,LANGCHAIN_PROJECT=nutria"
 ```
 
-### Opción B — Web (Streamlit + FastAPI)
-```bash
-# Terminal 1: API
-uv run uvicorn main:app --reload
+### Frontend → Vercel
 
-# Terminal 2: Frontend
-uv run streamlit run src/frontend/app.py
+```bash
+cd frontend
+npm install -g vercel
+vercel deploy --prod
+```
+
+Variables de entorno en Vercel:
+```
+BACKEND_URL=https://TU_CLOUD_RUN_URL
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+NEXTAUTH_SECRET=...
+NEXTAUTH_URL=https://TU_APP.vercel.app
+```
+
+---
+
+## 🧪 Cómo Testear el Agente
+
+### Test 1 — Texto con ingredientes
+```
+"Tengo pollo, arroz y brócoli, ¿qué puedo preparar?"
+→ El agente traduce a inglés y consulta Spoonacular
+```
+
+### Test 2 — Receta peruana (RAG)
+```
+"Quiero una receta de ceviche peruano"
+→ El agente usa search_peruvian_recipes con Elasticsearch
+```
+
+### Test 3 — Filtros de dieta
+```
+"Receta peruana vegetariana de la sierra"
+→ RAG con filtros: es_vegetariano=true, region=sierra
+```
+
+### Test 4 — Imagen de ingredientes
+```
+[Subir foto de ingredientes]
+→ Gemini analiza la imagen → lista ingredientes → agente recomienda receta
+```
+
+### Test 5 — Memoria conversacional
+```
+Turno 1: "Soy intolerante a la lactosa"
+Turno 2: "Dame una receta con pollo"
+→ El agente recuerda la restricción del turno anterior
+```
+
+### Via API directamente
+```bash
+# Endpoint compatible con frontend
+curl "https://nutria-backend-722466450755.us-central1.run.app/agent?idagente=test@gmail.com&msg=Quiero%20una%20receta%20peruana"
+
+# Health check
+curl "https://nutria-backend-722466450755.us-central1.run.app/"
 ```
 
 ---
@@ -229,110 +303,75 @@ uv run streamlit run src/frontend/app.py
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| `POST` | `/sessions` | Crear sesión con perfil de usuario |
-| `GET` | `/sessions` | Listar todas las sesiones |
-| `GET` | `/sessions/{id}` | Obtener perfil de una sesión |
-| `GET` | `/sessions/{id}/history` | Historial de mensajes de la sesión |
-| `POST` | `/sessions/{id}/chat` | Enviar mensaje (texto + imagen opcional) |
-| `POST` | `/recommend` | Endpoint legacy (compatibilidad) |
-
-### Ejemplo rápido
-```bash
-# 1. Crear sesión
-curl -X POST http://localhost:8000/sessions \
-  -H "Content-Type: application/json" \
-  -d '{"user_profile": {"name": "Pablo", "age": 30, "dietary_restrictions": [], "allergies": [], "health_goals": "perder peso"}}'
-
-# 2. Preguntar por recetas peruanas (usará RAG)
-curl -X POST http://localhost:8000/sessions/{session_id}/chat \
-  -F "message=¿qué recetas peruanas de la sierra me recomiendas?"
-
-# 3. Preguntar con ingredientes (usará Spoonacular)
-curl -X POST http://localhost:8000/sessions/{session_id}/chat \
-  -F "message=tengo pollo y brócoli, ¿qué preparo?"
-```
+| `GET` | `/` | Health check |
+| `GET` | `/agent` | Chat texto (compatible frontend) |
+| `POST` | `/agent` | Chat texto + imagen (compatible frontend) |
+| `POST` | `/sessions` | Crear sesión con perfil |
+| `GET` | `/sessions` | Listar sesiones |
+| `GET` | `/sessions/{id}` | Perfil de sesión |
+| `GET` | `/sessions/{id}/history` | Historial de mensajes |
+| `POST` | `/sessions/{id}/chat` | Chat por sesión |
+| `GET` | `/docs` | Swagger UI interactivo |
 
 ---
 
-## 🧪 Tests
+## 🧠 Memoria Conversacional
 
-```bash
-# Tests unitarios
-uv run pytest tests/unit/
-
-# Todos los tests
-uv run pytest
-```
-
----
-
-## 🧠 Memoria Persistente
-
-NutrIA usa el sistema de checkpointing nativo de LangGraph:
-
-| Modo | Cuándo se usa | Persistencia |
-|------|---------------|--------------|
+| Modo | Cuándo | Persistencia |
+|------|--------|-------------|
 | `PostgresSaver` | `DATABASE_URL` configurada | Permanente entre reinicios |
-| `MemorySaver` | Sin `DATABASE_URL` | Solo durante la sesión del proceso |
-
-Las tablas de LangGraph se crean automáticamente con `checkpointer.setup()`. La tabla de perfiles `nutria_sessions` se crea en startup.
+| `MemorySaver` | Sin `DATABASE_URL` | Solo durante el proceso activo |
 
 ---
 
-## 📊 Observabilidad con LangSmith
+## 🗂️ RAG — Recetas Peruanas
 
-Con `LANGCHAIN_API_KEY` y `LANGCHAIN_TRACING_V2=true` configurados, cada invocación del agente aparece automáticamente en el proyecto `nutria` de LangSmith: trazas, herramientas usadas, tokens y latencia.
-
----
-
-## 💰 Costos estimados
-
-| Componente | Servicio | Costo |
-|------------|----------|-------|
-| LLM principal | OpenAI GPT-4o | Pay-per-use |
-| LLM visión | Google Gemini 1.5 Flash | Free Tier |
-| Recetas generales | Spoonacular | Free Tier (150 req/día) |
-| Traducción | GPT-4o Mini | Ultra Low Cost |
-| Embeddings | text-embedding-3-small | Pay-per-use (muy bajo) |
-| Vector Store | Elasticsearch GCP | Elastic Cloud pricing |
-
----
-
-## 🚀 Roadmap
-
-- [x] Soporte multilingüe (español → inglés automático)
-- [x] CLI Interface
-- [x] **LangGraph Integration** — flujo ReAct con checkpointing
-- [x] **Memoria conversacional** — PostgresSaver + MemorySaver fallback
-- [x] **LangSmith tracing** — observabilidad automática
-- [x] **API conversacional** — endpoints REST por sesión
-- [x] **RAG Recetas Peruanas** — Elasticsearch híbrido (KNN + BM25 + RRF) con filtros de metadata
-- [ ] Auth — sistema de usuarios
-- [ ] Más fuentes RAG (PDFs MINCUL, HuggingFace, crawl web)
-
----
-
-## 🐳 Docker
-
-```bash
-docker build -t nutria-agent .
-docker run -p 8000:8000 --env-file configs/.env nutria-agent
+Pipeline de 4 pasos:
+```
+Load (JSONLoader) → Split (1 receta = 1 Document) → Embed (text-embedding-3-small) → Store (Elasticsearch)
 ```
 
----
-
-## 📄 Licencia
-
-MIT License - Ver [LICENSE](LICENSE) para más detalles.
+Filtros disponibles: `region` (costa/sierra/selva), `meal_type`, `dietary_restrictions`, `allergies`, `max_calories`, `max_prep_time`.
 
 ---
 
-## 👥 Contribuidores
+## 💰 Costos Estimados
 
-- **Pablo Guizado** - Desarrollador Principal
+| Servicio | Plan | Costo |
+|---------|------|-------|
+| Cloud Run | Free tier (2M req/mes) | $0 para demo |
+| Vercel | Hobby (gratuito) | $0 |
+| GPT-4o | Pay-per-use | ~$0.02-0.05 por conversación |
+| Gemini 2.0 Flash Lite | Free tier (30 RPM) | $0 |
+| Spoonacular | Free tier (150 req/día) | $0 |
+| PostgreSQL GCP VM | e2-micro | ~$7/mes encendida |
+| Elasticsearch GCP VM | e2-small | ~$15/mes encendida |
+
+> Las VMs pueden apagarse cuando no se usen — el sistema funciona con fallbacks.
+
+---
+
+## ✅ Roadmap
+
+- [x] LangGraph ReAct Agent con GPT-4o
+- [x] Memoria conversacional (PostgresSaver + MemorySaver)
+- [x] RAG Recetas Peruanas (Elasticsearch + text-embedding-3-small)
+- [x] Visión artificial con Google Gemini
+- [x] API REST conversacional con FastAPI
+- [x] Frontend responsive Next.js (dark mode, imagen, cámara)
+- [x] Deploy Cloud Run + Vercel
+- [x] Observabilidad con LangSmith
+- [ ] Más fuentes RAG (PDFs MINCUL, HuggingFace, crawl web)
+- [ ] Sistema de autenticación propio
+
+---
+
+## 👥 Autor
+
+**Pablo Guizado** — Proyecto Final de Especialización en IA Generativa
 
 ---
 
 <p align="center">
-  <b>🥗 NutrIA - Tu Chef y Nutricionista Personal con Inteligencia Artificial</b>
+  <b>🥗 NutrIA — Tu Chef y Nutricionista Personal con Inteligencia Artificial</b>
 </p>
